@@ -118,7 +118,7 @@
 
     #app {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) 360px;
+      grid-template-columns: minmax(0, 1fr) 384px;
       height: 100%
     }
 
@@ -291,8 +291,8 @@
       border-bottom: 1px solid var(--line);
       overflow-x: auto;
       padding-inline: max(12px, env(safe-area-inset-right, 0px)) 12px;
-      padding-left: 12px;
-      padding-right: max(12px, env(safe-area-inset-right, 0px))
+      padding-left: 10px;
+      padding-right: max(10px, env(safe-area-inset-right, 0px))
     }
 
     .tab {
@@ -300,8 +300,8 @@
       border: 0;
       background: none;
       color: var(--muted);
-      font: 500 13px var(--f-body);
-      padding: 13px 9px 11px;
+      font: 500 12.5px var(--f-body);
+      padding: 13px 5px 11px;
       border-bottom: 2px solid transparent;
       cursor: pointer;
       white-space: nowrap
@@ -425,6 +425,29 @@
       display: block;
       color: var(--muted);
       font-size: 12px
+    }
+
+    .range {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 6px 0
+    }
+
+    .range span {
+      display: flex;
+      justify-content: space-between
+    }
+
+    .range b {
+      font: 500 13px var(--f-mono);
+      font-variant-numeric: tabular-nums
+    }
+
+    .range input {
+      width: 100%;
+      accent-color: var(--ink);
+      cursor: pointer
     }
 
     .swatches {
@@ -762,6 +785,7 @@
         <button class="tab" role="tab" data-tab="dims" aria-selected="true">Размеры</button>
         <button class="tab" role="tab" data-tab="tape">Рулетка</button>
         <button class="tab" role="tab" data-tab="cargo">Груз</button>
+        <button class="tab" role="tab" data-tab="anim">Анимация</button>
         <button class="tab" role="tab" data-tab="tune">Тюнинг</button>
         <button class="tab" role="tab" data-tab="notes">Заметки</button>
       </div>
@@ -813,6 +837,38 @@
         </div>
       </section>
 
+      <section class="pane" data-pane="anim" hidden>
+        <div class="sec">
+          <h2>Езда</h2>
+          <label class="sw" for="a-drive"><span>Поехать<small>Машина едет по дороге, колёса крутятся</small></span><input
+              type="checkbox" id="a-drive"></label>
+          <label class="range" for="a-speed"><span>Скорость <b id="a-speedv"></b></span><input type="range" id="a-speed"
+              min="5" max="120" step="5"></label>
+        </div>
+        <div class="sec">
+          <h2>Открыть</h2>
+          <label class="sw" for="o-doors"><span>Двери</span><input type="checkbox" id="o-doors"></label>
+          <label class="sw" for="o-hood"><span>Капот</span><input type="checkbox" id="o-hood"></label>
+          <label class="sw" for="o-tail"><span>Задний борт</span><input type="checkbox" id="o-tail"></label>
+          <div class="row"><button class="btn ghost small" id="a-openall">Открыть всё</button></div>
+        </div>
+        <div class="sec">
+          <h2>Свет</h2>
+          <label class="sw" for="o-lights"><span>Фары и габариты</span><input type="checkbox" id="o-lights"></label>
+          <label class="sw" for="o-hazard"><span>Аварийка<small>Мигают повторители на зеркалах</small></span><input type="checkbox"
+              id="o-hazard"></label>
+        </div>
+        <div class="sec">
+          <h2>Окружение</h2>
+          <div class="row" id="envs" role="group" aria-label="Окружение">
+            <button class="chip" data-env="studio">Студия</button>
+            <button class="chip" data-env="road">Дорога</button>
+            <button class="chip" data-env="shop">Мастерская</button>
+          </div>
+          <p class="note">Студия — сетка для замеров. Езда всегда идёт по дороге.</p>
+        </div>
+      </section>
+
       <section class="pane" data-pane="tune" hidden>
         <div class="sec">
           <h2>Цвет кузова</h2>
@@ -834,9 +890,6 @@
         </div>
         <div class="sec">
           <h2>Вид</h2>
-          <label class="sw" for="o-doors"><span>Открыть двери</span><input type="checkbox" id="o-doors"></label>
-          <label class="sw" for="o-hood"><span>Открыть капот</span><input type="checkbox" id="o-hood"></label>
-          <label class="sw" for="o-tail"><span>Открыть задний борт</span><input type="checkbox" id="o-tail"></label>
           <label class="sw" for="o-xray"><span>Прозрачный кузов<small>Видно салон и раму</small></span><input
               type="checkbox" id="o-xray"></label>
         </div>
@@ -877,7 +930,7 @@
       /* ---------- State ---------- */
       // 'orig' = paint colour exported from Blender
       const COLORS = [['Как в Blender', 'orig'], ['Белый', '#e6e9ea'], ['Чёрный', '#1c2024'], ['Серебро', '#a7aeb3'], ['Графит', '#555d63'], ['Песочный', '#b8a07a'], ['Тёмно-красный', '#7d1c1f']];
-      const DEF = { canopy: false, rack: false, pod: false, bar: false, snorkel: false, bumper: false, wheels: false, tail: false, doors: false, hood: false, xray: false, color: 'orig', dims: { overall: true, bed: false, cabin: false }, cargo: { L: 1200, W: 800, H: 150, show: true } };
+      const DEF = { canopy: false, rack: false, pod: false, bar: false, snorkel: false, bumper: false, wheels: false, tail: false, doors: false, hood: false, xray: false, env: 'studio', speed: 40, lights: true, hazard: false, color: 'orig', dims: { overall: true, bed: false, cabin: false }, cargo: { L: 1200, W: 800, H: 150, show: true } };
       let cfg = JSON.parse(JSON.stringify(DEF)), notes = null;
       try {
         const s = JSON.parse(localStorage.getItem('hilux3d.v2') || 'null');
@@ -934,14 +987,132 @@
       let grid = null, gridFine = null;
       const dimMat = new THREE.LineBasicMaterial({ color: 0x2a6a99 });
       const tapeMat = new THREE.LineBasicMaterial({ color: 0xf0b429, depthTest: false });
+      /* ---------- Environments: studio grid, road, workshop (built lazily, all procedural) ---------- */
+      const maxAniso = Math.min(8, renderer.capabilities.getMaxAnisotropy());
+      const env = { road: null, shop: null, studioBg: null };
+      function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296 } }
+      function canvasTex(w, h, draw, rx = 1, ry = 1) {
+        const c = document.createElement('canvas'); c.width = w; c.height = h; draw(c.getContext('2d'), w, h);
+        const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(rx, ry); t.encoding = THREE.sRGBEncoding; t.anisotropy = maxAniso; return t;
+      }
+      function speckle(g, w, h, n, cols, size, seed) { const r = rng(seed); for (let i = 0; i < n; i++) { g.fillStyle = cols[i % cols.length]; const s = size * (.5 + r()); g.fillRect(r() * w, r() * h, s, s) } }
+      function flat(w, d, mat, x, z, y) { const m = new THREE.Mesh(new THREE.PlaneGeometry(w, d), mat); m.rotation.x = -Math.PI / 2; m.position.set(x, y, z); return m }
+      // hex colours are sRGB; r128 treats them as linear, so convert or they come out washed out
+      const std2 = (o) => { const m = new THREE.MeshStandardMaterial(Object.assign({ roughness: .9 }, o)); if (o.color != null) m.color.convertSRGBToLinear(); return m };
+
+      const ROAD_L = 140; // length of the scrolling strip, m
+      function buildRoad() {
+        const g = new THREE.Group(), r = rng(7), scroll = [], movers = [];
+        // sky dome: vertical gradient that fades into the fog colour at the horizon
+        const sky = canvasTex(4, 256, (c, w, h) => { const gr = c.createLinearGradient(0, 0, 0, h); gr.addColorStop(0, '#6f9fc8'); gr.addColorStop(.48, '#bcd4e4'); gr.addColorStop(.52, '#d6e2e8'); gr.addColorStop(1, '#d6e2e8'); c.fillStyle = gr; c.fillRect(0, 0, w, h) });
+        g.add(new THREE.Mesh(new THREE.SphereGeometry(128, 32, 16), new THREE.MeshBasicMaterial({ map: sky, side: THREE.BackSide, fog: false })));
+        const tile = (tex, len) => { scroll.push({ tex, len }); return tex };
+        const asphalt = tile(canvasTex(512, 512, (c, w, h) => { c.fillStyle = '#46494c'; c.fillRect(0, 0, w, h); speckle(c, w, h, 14000, ['#3e4144', '#4f5356', '#424548', '#55595c'], 1.4, 1) }, ROAD_L / 3, 7.6 / 3), 3);
+        g.add(flat(ROAD_L, 7.6, std2({ map: asphalt, roughness: .95 }), 0, -1.8, -.004));
+        const dash = tile(canvasTex(64, 4, (c) => { c.fillStyle = '#f1f0ea'; c.fillRect(0, 0, 21, 4) }, ROAD_L / 9, 1), 9);
+        g.add(flat(ROAD_L, .13, std2({ map: dash, alphaTest: .5, roughness: .6 }), 0, -1.8, -.003));
+        const line = std2({ color: 0xe9e8e2, roughness: .6 });
+        g.add(flat(ROAD_L, .15, line, 0, 1.82, -.003), flat(ROAD_L, .15, line, 0, -5.42, -.003));
+        const gravel = tile(canvasTex(128, 128, (c, w, h) => { c.fillStyle = '#8d877b'; c.fillRect(0, 0, w, h); speckle(c, w, h, 2200, ['#6f6a60', '#a49d90', '#7d776c', '#b5aea1'], 2.5, 2) }, ROAD_L / 2, 1), 2);
+        const gm = std2({ map: gravel });
+        g.add(flat(ROAD_L, 1.4, gm, 0, 2.7, -.005), flat(ROAD_L, 1.4, gm, 0, -6.3, -.005));
+        const grass = tile(canvasTex(256, 256, (c, w, h) => { c.fillStyle = '#6c8746'; c.fillRect(0, 0, w, h); speckle(c, w, h, 6000, ['#5a7438', '#7f9a55', '#63803f', '#8aa560', '#6f7f45'], 3, 3) }, 260 / 6, 260 / 6), 6);
+        g.add(flat(260, 260, std2({ map: grass }), 0, 0, -.008));
+        // roadside delineator posts
+        const postM = std2({ color: 0xf2f2ee, roughness: .6 }), bandM = std2({ color: 0x1b1d1f }), refM = new THREE.MeshBasicMaterial({ color: 0xff8a1e });
+        for (let x = -ROAD_L / 2; x < ROAD_L / 2; x += 14) [3.4, -7].forEach(z => {
+          const p = new THREE.Group(); p.add(new THREE.Mesh(new THREE.BoxGeometry(.1, 1, .1), postM)); p.children[0].position.y = .5;
+          const b = new THREE.Mesh(new THREE.BoxGeometry(.105, .22, .105), bandM); b.position.y = .82; p.add(b);
+          const rf = new THREE.Mesh(new THREE.BoxGeometry(.11, .1, .04), refM); rf.position.set(0, .82, z > 0 ? -.04 : .04); p.add(rf);
+          p.position.z = z; movers.push({ o: p, x0: x + (z > 0 ? 0 : 7) }); g.add(p);
+        });
+        // low-poly trees
+        const trunkM = std2({ color: 0x5b4330 }), leafM = [std2({ color: 0x3f6b35, flatShading: true }), std2({ color: 0x4f7c3a, flatShading: true }), std2({ color: 0x365c32, flatShading: true })];
+        const trunkG = new THREE.CylinderGeometry(.1, .15, 1.4, 6), coneG = new THREE.ConeGeometry(1.2, 3.2, 7), ballG = new THREE.IcosahedronGeometry(1.4, 0);
+        for (let i = 0; i < 46; i++) {
+          const t = new THREE.Group(), s = .75 + r() * .7, side = r() < .5 ? 1 : -1;
+          const tr = new THREE.Mesh(trunkG, trunkM); tr.position.y = .7; t.add(tr);
+          const cone = r() < .6, cr = new THREE.Mesh(cone ? coneG : ballG, leafM[i % 3]); cr.position.y = cone ? 2.6 : 2.4; cr.rotation.y = r() * 6; t.add(cr);
+          t.scale.setScalar(s); t.position.z = side > 0 ? 6 + r() * 22 : -(10 + r() * 22);
+          movers.push({ o: t, x0: -ROAD_L / 2 + i * ROAD_L / 46 + r() * 2 }); g.add(t);
+        }
+        g.userData = { scroll, movers }; return g;
+      }
+
+      function buildShop() {
+        const g = new THREE.Group(), W = 26, D = 24, H = 7;
+        const floorTex = canvasTex(512, 512, (c, w, h) => {
+          c.fillStyle = '#74797c'; c.fillRect(0, 0, w, h); const r = rng(11);
+          for (let i = 0; i < 140; i++) { c.fillStyle = r() < .5 ? 'rgba(60,66,70,.05)' : 'rgba(255,255,255,.06)'; c.beginPath(); c.arc(r() * w, r() * h, 20 + r() * 70, 0, 7); c.fill() }
+          speckle(c, w, h, 3000, ['rgba(70,74,78,.35)', 'rgba(255,255,255,.25)'], 1.6, 12);
+          c.fillStyle = '#6c7174'; c.fillRect(0, 0, w, 3); c.fillRect(0, 0, 3, h);
+        }, W / 4, D / 4);
+        g.add(flat(W, D, std2({ map: floorTex, roughness: .7, metalness: .05 }), 0, 0, -.004));
+        // working bay outline + hatched band at the front
+        const yel = std2({ color: 0xe0b21c, roughness: .6 });
+        g.add(flat(7.6, .1, yel, 0, 2.55, -.003), flat(7.6, .1, yel, 0, -2.55, -.003), flat(.1, 5.2, yel, 3.8, 0, -.003), flat(.1, 5.2, yel, -3.8, 0, -.003));
+        const hatch = canvasTex(64, 64, (c, w, h) => { c.fillStyle = '#1d1f21'; c.fillRect(0, 0, w, h); c.fillStyle = '#e0b21c'; for (let i = -64; i < 128; i += 32) { c.beginPath(); c.moveTo(i, 0); c.lineTo(i + 16, 0); c.lineTo(i + 16 - 64, 64); c.lineTo(i - 64, 64); c.fill() } }, 10, 1);
+        g.add(flat(.5, 5.2, std2({ map: hatch }), 4.15, 0, -.003));
+        // room: inner faces only, so cameras outside still see in
+        const wallTex = canvasTex(8, 512, (c, w, h) => { c.fillStyle = '#aab1b5'; c.fillRect(0, 0, w, h); const b = h * 1.2 / H; c.fillStyle = '#3f474e'; c.fillRect(0, h - b, w, b); c.fillStyle = '#e0b21c'; c.fillRect(0, h - b - 6, w, 6) });
+        const wallM = std2({ map: wallTex, side: THREE.BackSide }), ceilM = std2({ color: 0x5f676c, side: THREE.BackSide }), none = new THREE.MeshBasicMaterial({ visible: false });
+        const room = new THREE.Mesh(new THREE.BoxGeometry(W, H, D), [wallM, wallM, ceilM, none, wallM, wallM]); room.position.y = H / 2 - .01; g.add(room);
+        const lampM = new THREE.MeshBasicMaterial({ color: 0xf4f7f8 });
+        [-7, 0, 7].forEach(x => [-5, 5].forEach(z => { const l = new THREE.Mesh(new THREE.BoxGeometry(3.2, .08, .45), lampM); l.position.set(x, H - .2, z); g.add(l) }));
+        // roll-up door on the far wall (seen from the front view)
+        const doorTex = canvasTex(8, 256, (c, w, h) => { c.fillStyle = '#9aa2a7'; c.fillRect(0, 0, w, h); c.fillStyle = '#6f777c'; for (let y = 0; y < h; y += 16) c.fillRect(0, y, w, 3) });
+        [-4, 4].forEach(z => { const d = new THREE.Mesh(new THREE.PlaneGeometry(5, 4.4), std2({ map: doorTex, metalness: .3, roughness: .6 })); d.rotation.y = Math.PI / 2; d.position.set(-W / 2 + .02, 2.2, z); g.add(d);
+          const fr = new THREE.Mesh(new THREE.BoxGeometry(.08, 4.6, 5.3), std2({ color: 0x3a4045 })); fr.position.set(-W / 2 + .01, 2.3, z); g.add(fr) });
+        // tool cabinets + pegboard on the back wall
+        const red = std2({ color: 0x8a1610, metalness: .35, roughness: .4 }), steel = std2({ color: 0x8c9396, metalness: .6, roughness: .4 }), dark = std2({ color: 0x24282b });
+        for (let i = 0; i < 6; i++) {
+          const x = -6 + i * 1.35, cab = new THREE.Mesh(new THREE.BoxGeometry(1.3, 1, .6), red); cab.position.set(x, .5, -D / 2 + .32); g.add(cab);
+          const top = new THREE.Mesh(new THREE.BoxGeometry(1.32, .04, .62), steel); top.position.set(x, 1.02, -D / 2 + .32); g.add(top);
+          for (let k = 0; k < 4; k++) { const dr = new THREE.Mesh(new THREE.BoxGeometry(1.2, .015, .01), dark); dr.position.set(x, .25 + k * .2, -D / 2 + .625); g.add(dr) }
+        }
+        const peg = new THREE.Mesh(new THREE.PlaneGeometry(8, 1.7), std2({ color: 0x3f474d })); peg.position.set(-2.6, 2.15, -D / 2 + .02); g.add(peg);
+        const r = rng(5); for (let i = 0; i < 26; i++) { const t = new THREE.Mesh(new THREE.BoxGeometry(.05 + r() * .1, .2 + r() * .45, .03), r() < .3 ? red : steel); t.position.set(-6.3 + i * .29, 2.1 + (r() - .5) * .5, -D / 2 + .05); g.add(t) }
+        // workbench with vise on the wall behind the car
+        const wood = std2({ color: 0x8a6a45, roughness: .8 }), bx = W / 2 - .45;
+        const bench = new THREE.Mesh(new THREE.BoxGeometry(.8, .06, 3.4), wood); bench.position.set(bx, .92, 3); g.add(bench);
+        [[-1.6], [1.6]].forEach(([dz]) => [-.3, .3].forEach(dx => { const l = new THREE.Mesh(new THREE.BoxGeometry(.06, .9, .06), dark); l.position.set(bx + dx, .45, 3 + dz); g.add(l) }));
+        const vise = new THREE.Mesh(new THREE.BoxGeometry(.25, .18, .2), std2({ color: 0x2f5f8f, metalness: .4 })); vise.position.set(bx - .2, 1.04, 1.6); g.add(vise);
+        // tyres and oil drums in the corners
+        const tyre = new THREE.CylinderGeometry(.4, .4, .27, 24), tyreM = std2({ color: 0x1c1e20 });
+        [[9.8, -9.6, 4], [8.9, -10.4, 3]].forEach(([x, z, n]) => { for (let k = 0; k < n; k++) { const t = new THREE.Mesh(tyre, tyreM); t.position.set(x, .135 + k * .27, z); g.add(t) } });
+        const drum = new THREE.CylinderGeometry(.3, .3, .9, 20), drumM = std2({ color: 0x173f73, metalness: .35, roughness: .45 });
+        [[-10.8, -10.6], [-10.1, -10.9], [-10.5, -10.0]].forEach(([x, z]) => { const d = new THREE.Mesh(drum, drumM); d.position.set(x, .45, z); g.add(d) });
+        return g;
+      }
+
+      function applyEnv() {
+        const e = cfg.env;
+        if (e === 'road' && !env.road) { env.road = buildRoad(); scene.add(env.road) }
+        if (e === 'shop' && !env.shop) { env.shop = buildShop(); scene.add(env.shop) }
+        if (env.road) env.road.visible = e === 'road';
+        if (env.shop) env.shop.visible = e === 'shop';
+        [grid, gridFine].forEach(o => o && (o.visible = e === 'studio'));
+        scene.background = e === 'road' ? new THREE.Color(0xd6e2e8) : e === 'shop' ? new THREE.Color(0x5f676c) : env.studioBg;
+        scene.fog = e === 'road' ? new THREE.Fog(0xd6e2e8, 45, 125) : null;
+        ground.material.opacity = e === 'studio' ? .22 : .32;
+        $$('#envs [data-env]').forEach(b => b.setAttribute('aria-pressed', b.dataset.env === e));
+      }
+      function scrollRoad(dist) {
+        if (!env.road) return;
+        const { scroll, movers } = env.road.userData;
+        scroll.forEach(s => s.tex.offset.x = (dist / s.len) % 1);
+        movers.forEach(m => { let x = (m.x0 - dist) % ROAD_L; if (x < -ROAD_L / 2) x += ROAD_L; if (x >= ROAD_L / 2) x -= ROAD_L; m.o.position.x = x });
+      }
+
       function applyTheme() {
         const cs = getComputedStyle(document.documentElement), g = k => cs.getPropertyValue(k).trim();
-        scene.background = new THREE.Color(g('--scene-bg'));
+        env.studioBg = new THREE.Color(g('--scene-bg'));
         [grid, gridFine].forEach(o => { if (o) { scene.remove(o); o.geometry.dispose() } });
         grid = new THREE.GridHelper(20, 20, g('--grid-major'), g('--grid-major')); grid.position.y = .001;
         gridFine = new THREE.GridHelper(10, 40, g('--grid-minor'), g('--grid-minor'));
         scene.add(gridFine, grid);
         dimMat.color.set(g('--dim')); tapeMat.color.set(g('--accent'));
+        applyEnv();
       }
       (function (mq) { if (mq.addEventListener) mq.addEventListener('change', applyTheme); else if (mq.addListener) mq.addListener(applyTheme) })(matchMedia('(prefers-color-scheme: dark)'));
       new MutationObserver(applyTheme).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
@@ -957,6 +1128,9 @@
       /* ---------- Blender model (pickup.glb) ---------- */
       const N = {};               // nodes by name
       const paintMats = [];       // every material named "Paint"
+      const lampMats = { LED: [], TailRed: [], Amber: [] }; // glowing materials, base intensity kept in userData.ei
+      const beams = [];           // headlight spot lights
+      let wheelK = 1;
       let origPaint = null, bodyGroup = null, extras = null, bedFloor = .872;
       const WHEEL_R0 = .439, wheelBase = {}; // model wheel radius; original wheel positions
       function glbBuffer() {
@@ -978,6 +1152,7 @@
             if (strength[m.name] != null) m.emissiveIntensity = strength[m.name];
             if (m.transparent) m.depthWrite = false;
             if (m.name === 'Paint' && !paintMats.includes(m)) paintMats.push(m);
+            if (lampMats[m.name] && !lampMats[m.name].includes(m)) { m.userData.ei = m.emissiveIntensity; lampMats[m.name].push(m) }
           });
         });
         origPaint = paintMats.length ? paintMats[0].color.clone() : new THREE.Color(1, 1, 1);
@@ -988,12 +1163,21 @@
           if (/^wheel_/.test(o.name)) { wheelBase[o.name] = o.position.clone(); carRoot.add(o) } else bodyGroup.add(o);
         });
         extras = new THREE.Group(); bodyGroup.add(extras);
+        ['headlight_L', 'headlight_R'].forEach(n => {
+          if (!N[n]) return;
+          const sp = new THREE.SpotLight(0xfff3e0, 2.2, 32, .42, .55, 1.2); sp.position.copy(N[n].position);
+          sp.target.position.copy(N[n].position).add(new THREE.Vector3(6, -.75, 0)); bodyGroup.add(sp, sp.target); beams.push(sp);
+        });
         // bed floor height for the cargo box
         bodyGroup.updateMatrixWorld(true);
         const hit = new THREE.Raycaster(new THREE.Vector3(S(4400), 1.6, 0), new THREE.Vector3(0, -1, 0)).intersectObject(bodyGroup, true)[0];
         if (hit && hit.point.y > .5 && hit.point.y < 1.2) bedFloor = hit.point.y;
-        applyColor(); applyXray(); buildCar(); renderPins();
+        applyColor(); applyXray(); applyLights(); buildCar(); renderPins();
         const h = $('#hint'); if (h.dataset.loading) { delete h.dataset.loading; updateHint() }
+      }
+      function applyLights() {
+        lampMats.LED.concat(lampMats.TailRed).forEach(m => m.emissiveIntensity = cfg.lights ? m.userData.ei : 0);
+        beams.forEach(b => b.visible = !!cfg.lights);
       }
       function applyColor() {
         if (!origPaint) return;
@@ -1006,7 +1190,7 @@
       function buildCar() {
         if (!bodyGroup) { buildCargo(); buildDims(); return }
         const k = cfg.wheels ? .419 / .388 : 1;
-        wheelR = .388 * k;
+        wheelR = .388 * k; wheelK = k;
         raise = cfg.wheels ? WHEEL_R0 * (k - 1) + .05 : 0;
         bodyGroup.position.y = raise;
         Object.keys(wheelBase).forEach(n => { const w = N[n], p = wheelBase[n]; w.scale.setScalar(k); w.position.set(p.x, p.y * k, p.z + Math.sign(p.z) * (cfg.wheels ? .03 : 0)) });
@@ -1242,7 +1426,15 @@
       ['overall', 'bed', 'cabin'].forEach(k => { const el = $('#d-' + k); el.checked = !!cfg.dims[k]; el.addEventListener('change', () => { cfg.dims[k] = el.checked; groups[k].visible = el.checked; save() }) });
       const opt = { canopy: 'o-canopy', rack: 'o-rack', pod: 'o-pod', bar: 'o-bar', snorkel: 'o-snorkel', bumper: 'o-bumper', wheels: 'o-wheels' };
       Object.entries(opt).forEach(([k, id]) => { const el = $('#' + id); el.checked = !!cfg[k]; el.addEventListener('change', () => { cfg[k] = el.checked; save(); buildCar() }) });
-      ['tail', 'doors', 'hood'].forEach(k => { const el = $('#o-' + k); el.checked = !!cfg[k]; el.addEventListener('change', () => { cfg[k] = el.checked; save() }) });
+      function syncOpenAll() { $('#a-openall').textContent = cfg.tail && cfg.doors && cfg.hood ? 'Закрыть всё' : 'Открыть всё' }
+      ['tail', 'doors', 'hood'].forEach(k => { const el = $('#o-' + k); el.checked = !!cfg[k]; el.addEventListener('change', () => { cfg[k] = el.checked; syncOpenAll(); save() }) });
+      $('#a-openall').addEventListener('click', () => { const v = !(cfg.tail && cfg.doors && cfg.hood); ['tail', 'doors', 'hood'].forEach(k => { cfg[k] = v; $('#o-' + k).checked = v }); syncOpenAll(); save() }); syncOpenAll();
+      ['lights', 'hazard'].forEach(k => { const el = $('#o-' + k); el.checked = !!cfg[k]; el.addEventListener('change', () => { cfg[k] = el.checked; applyLights(); save() }) });
+      function setEnv(e) { cfg.env = e; applyEnv(); save(); if (e !== 'road' && drive) { drive = false; $('#a-drive').checked = false } }
+      $('#envs').addEventListener('click', e => { const v = e.target.dataset.env; if (v) setEnv(v) });
+      $('#a-drive').addEventListener('change', e => { drive = e.target.checked; if (drive && cfg.env !== 'road') setEnv('road') });
+      const spd = $('#a-speed'), spdV = () => $('#a-speedv').textContent = cfg.speed + ' км/ч';
+      spd.value = cfg.speed; spdV(); spd.addEventListener('input', () => { cfg.speed = +spd.value; spdV(); save() });
       function applyXray() { paintMats.forEach(m => { m.transparent = cfg.xray; m.opacity = cfg.xray ? .16 : 1; m.depthWrite = !cfg.xray; m.needsUpdate = true }) }
       $('#o-xray').checked = cfg.xray; $('#o-xray').addEventListener('change', e => { cfg.xray = e.target.checked; applyXray(); save() }); applyXray();
       $('#colors').innerHTML = COLORS.map(([n, c]) => `<button class="swatch" style="background:${c === 'orig' ? '#eeeeee' : c}" data-col="${c}" aria-label="${n}" title="${n}" aria-pressed="${c === cfg.color}"></button>`).join('');
@@ -1257,8 +1449,22 @@
       window.addEventListener('resize', resize); window.addEventListener('orientationchange', () => setTimeout(resize, 200)); resize();
       if (touch) { const th = $('#touchHint'); th.hidden = false; const hide = () => { th.style.opacity = 0; setTimeout(() => th.hidden = true, 400) }; renderer.domElement.addEventListener('touchstart', hide, { once: true, passive: true }); setTimeout(hide, 4000) }
       const tmp = new THREE.Vector3(), ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+      // driving: the car stays put, the road scrolls under it
+      let drive = false, last = performance.now(), dist = 0, spin = 0, vel = 0;
       function loop(now) {
         requestAnimationFrame(loop);
+        const dt = Math.min(.05, (now - last) / 1000); last = now;
+        const goalV = drive ? cfg.speed / 3.6 : 0;
+        vel += (goalV - vel) * Math.min(1, dt * (reduce ? 20 : drive ? .8 : 1.5)); if (!drive && vel < .02) vel = 0;
+        if (vel) { dist += vel * dt; spin += vel * dt / (WHEEL_R0 * wheelK); scrollRoad(dist) }
+        Object.keys(wheelBase).forEach(n => N[n].rotation.z = -spin);
+        if (bodyGroup) {
+          const a = reduce ? 0 : Math.min(1, vel / 10);
+          bodyGroup.position.y = raise + a * (.005 * Math.sin(now * .011) + .003 * Math.sin(now * .027));
+          bodyGroup.rotation.z = a * .003 * Math.sin(now * .0065);
+        }
+        const blink = cfg.hazard && Math.floor(now / 420) % 2 === 0;
+        lampMats.Amber.forEach(m => m.emissiveIntensity = cfg.hazard ? (blink ? 6 : 0) : m.userData.ei);
         if (fly) {
           const t = Math.min(1, (now - fly.start) / fly.dur), k = ease(t);
           camera.position.lerpVectors(fly.p0, fly.p1, k); controls.target.lerpVectors(fly.t0, fly.t1, k); camera.fov = fly.f0 + (fly.f1 - fly.f0) * k; camera.updateProjectionMatrix(); camera.lookAt(controls.target);
