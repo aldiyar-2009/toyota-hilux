@@ -746,6 +746,40 @@
         transition: none !important
       }
     }
+
+    /* PIRANT projects tab */
+    .proj { display: flex; gap: 10px; align-items: center; border: 1px solid var(--line); border-radius: 5px; padding: 8px; background: var(--surface-2) }
+    .proj img { width: 92px; border-radius: 3px; background: #fff; flex: none }
+    .proj b { display: block; font-size: 13.5px }
+    .proj span { color: var(--muted); font-size: 12px }
+    .pane details { border: 1px solid var(--line); border-radius: 5px; background: var(--surface-2) }
+    .pane summary { cursor: pointer; padding: 10px 12px; font-weight: 600; list-style: none; display: flex; justify-content: space-between; gap: 8px }
+    .pane summary::-webkit-details-marker { display: none }
+    .pane summary::after { content: "+"; color: var(--muted); font-family: var(--f-mono) }
+    .pane details[open] summary::after { content: "−" }
+    .pane details > div { padding: 0 12px 12px; display: flex; flex-direction: column; gap: 10px }
+    .iss { border-left: 3px solid var(--line); padding: 1px 0 1px 10px; font-size: 13px }
+    .iss b { display: block }
+    .iss p { margin: 2px 0 0; color: var(--muted); font-size: 12.5px }
+    .iss.hi { border-left-color: var(--bad) }
+    .iss.md { border-left-color: var(--accent) }
+    .iss.ok { border-left-color: var(--ok) }
+    .ptbl { width: 100%; border-collapse: collapse; font-size: 12px }
+    .ptbl th, .ptbl td { padding: 5px 4px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; overflow-wrap: anywhere }
+    .ptbl th { color: var(--muted); font-weight: 500 }
+    .ptbl .n { text-align: right; font-family: var(--f-mono); font-variant-numeric: tabular-nums; white-space: nowrap }
+    .ptbl .bad { color: var(--bad) }
+    .ptbl .bad s { display: block; color: var(--muted); font-size: 11px }
+    .ptbl tr.sum td { font-weight: 600 }
+    .st { font: 500 11px var(--f-mono); padding: 2px 5px; border-radius: 3px; white-space: nowrap; border: 1px solid var(--line); background: var(--surface) }
+    .st.ok { color: var(--ok) }
+    .st.md { color: var(--accent-text) }
+    .st.hi { color: var(--bad) }
+    .tl2 { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; font-size: 12.5px }
+    .tl2 b { font: 500 12px var(--f-mono); color: var(--accent-text); margin-right: 6px }
+    .upl { display: block; border: 1px dashed var(--line); border-radius: 5px; padding: 8px; text-align: center; cursor: pointer; color: var(--muted); font-size: 12.5px }
+    .upl:hover { border-color: var(--ink); color: var(--ink) }
+    .upl input { display: none }
   </style>
 
   <div id="app">
@@ -788,6 +822,7 @@
         <button class="tab" role="tab" data-tab="anim">Анимация</button>
         <button class="tab" role="tab" data-tab="tune">Тюнинг</button>
         <button class="tab" role="tab" data-tab="notes">Заметки</button>
+        <button class="tab" role="tab" data-tab="pirant">Проекты PIRANT</button>
       </div>
 
       <section class="pane" data-pane="dims">
@@ -905,6 +940,143 @@
         </div>
         <ul class="list" id="noteList"></ul>
       </section>
+
+      <section class="pane" data-pane="pirant" hidden>
+        <div class="sec">
+          <h2>Проекты PIRANT</h2>
+          <div class="row" role="group" aria-label="Проект"><button class="chip" aria-pressed="true">LED-панели на кузов</button></div>
+          <div class="proj"><img src="sketch.png" alt="Эскиз: экран над кузовом Hilux">
+            <div><b>Багажник в кузове: LED-панели по бокам, динамики сверху</b><span>Астана · Legacy Gold Company · КП от 23.10.2026 · статус: согласование</span></div>
+          </div>
+          <dl class="spec">
+            <div><dt>Панели</dt><dd>2, по краям багажника</dd></div>
+            <div><dt>Активная зона панели</dt><dd>1440 × 640 мм</dd></div>
+            <div><dt>Габарит с рамкой</dt><dd>1490 × 690 мм</dd></div>
+            <div><dt>Сверху</dt><dd>2 блока динамиков</dd></div>
+            <div><dt>Высота авто в сборе</dt><dd id="l-h">—</dd></div>
+            <div><dt>Потребление</dt><dd>~800 Вт<em>пик 1,5 кВт</em></dd></div>
+          </dl>
+          <p class="note">КП действует 10 дней с 23.10.2026 — примерно <b>до 02.11.2026</b>.</p>
+        </div>
+
+        <div class="sec">
+          <h2>На модели</h2>
+          <label class="sw" for="l-show"><span>Показать проект</span><input type="checkbox" id="l-show"></label>
+          <label class="sw" for="l-dims"><span>Размеры</span><input type="checkbox" id="l-dims"></label>
+          <label class="sw" for="l-mods"><span>Раскладка модулей<small>9 × 2 модуля 160×320 мм на панель (повёрнуты)</small></span><input type="checkbox" id="l-mods"></label>
+          <label class="sw" for="l-frame"><span>Багажник из профтрубы</span><input type="checkbox" id="l-frame"></label>
+          <label class="sw" for="l-spk"><span>Динамики сверху<small>Модель и мощность пока не выбраны</small></span><input type="checkbox" id="l-spk"></label>
+          <label class="sw" for="l-gen"><span>Генератор в кузове<small>Наша оценка: инверторный, 2–2,5 кВт</small></span><input type="checkbox" id="l-gen"></label>
+        </div>
+
+        <div class="sec">
+          <h2>Шаг пикселя</h2>
+          <div class="row" id="l-pitch" role="group" aria-label="Шаг пикселя">
+            <button class="chip" data-p="p3">P3.076</button>
+            <button class="chip" data-p="p4">P4</button>
+          </div>
+          <p class="note" id="l-pitchNote"></p>
+        </div>
+
+        <div class="sec">
+          <h2>Видео 16:9 на экране 9:4</h2>
+          <div class="row" id="l-fit" role="group" aria-label="Подгонка видео">
+            <button class="chip" data-f="fit">Вписать</button>
+            <button class="chip" data-f="fill">Обрезать</button>
+            <button class="chip" data-f="stretch">Растянуть</button>
+          </div>
+          <p class="note" id="l-fitNote"></p>
+          <div class="row" id="l-content" role="group" aria-label="Контент">
+            <button class="chip" data-c="auto">По кругу</button>
+            <button class="chip" data-c="0">Логотип</button>
+            <button class="chip" data-c="1">Тест 16:9</button>
+            <button class="chip" data-c="2">Бегущая строка</button>
+          </div>
+          <label class="upl">Загрузить своё видео или фото<input type="file" id="l-file" accept="video/*,image/*"></label>
+        </div>
+
+        <div class="sec">
+          <h2>Освещение и яркость</h2>
+          <label class="sw" for="l-night"><span>Ночь<small>Сцена в темноте, экран светится</small></span><input type="checkbox" id="l-night"></label>
+          <label class="sw" for="l-auto"><span>Авто-яркость (датчик)</span><input type="checkbox" id="l-auto"></label>
+          <label class="range" for="l-bright"><span>Яркость <b id="l-nits"></b></span><input type="range" id="l-bright" min="10" max="100" step="5"></label>
+        </div>
+
+        <details open>
+          <summary>Важно до подписания</summary>
+          <div>
+            <div class="iss hi"><b>1440×640 — это 9:4, а не 16:9</b><p>Видео 16:9 займёт по ширине 1138 мм из 1440, по бокам будут поля ~150 мм. Чтобы было 16:9 во всю длину, нужна высота 810 мм. Другой вариант — делать ролики под 9:4. Расчёт наш.</p></div>
+            <div class="iss hi"><b>Вариант P4: ошибки в строке модулей и в итоге</b><p>Модули: 40 × 7 920 = 316 800 ₸, а в ячейке напечатано 190 080. Итог в КП 621 891 ₸, хотя строки дают 612 891 ₸ — похоже, переставлены цифры (+9 000 ₸). С исправленным монтажом выходит 610 891 ₸, с НДС — 708 634 ₸.</p></div>
+            <div class="iss md"><b>Ошибки в строках сметы</b><p>Шлейф: 40 × 348 = 13 920, а в ячейке 31 871. Монтаж: 2,0562 × 40 000 = 82 248, а в КП 84 248 (лишние 2 000 ₸).</p></div>
+            <div class="iss md"><b>НДС: включён или сверху?</b><p>В условиях написано «цены с НДС», но в таблице НДС 16% добавлен ещё раз.</p></div>
+            <div class="iss md"><b>Модулей 40, а нужно 36</b><p>При раскладке 9×2 повёрнутых модулей — 18 на сторону, 36 всего. Нужно спросить, это 4 запасных или другая раскладка.</p></div>
+            <div class="iss md"><b>12 В не хватит</b><p>800 Вт — это ~67 А от 12 В. Нужен генератор или инвертор. Точную мощность запросили у поставщика 23.10.</p></div>
+            <div class="iss md"><b>Конструкция</b><p>Модули держатся на магнитах. Багажник усиливают поперечными профтрубами. В КП посчитан один двусторонний экран — нужно согласовать с поставщиком вариант «две панели по краям багажника». Учесть высоту авто в сборе для паркингов и моек.</p></div>
+            <div class="iss md"><b>Динамики не входят в КП</b><p>Их нужно подобрать отдельно и учесть в мощности генератора, а также крепление на верх багажника.</p></div>
+            <div class="iss md"><b>Не подтверждено письменно</b><p>Производитель и диоды, яркость в нитах, бренд и IP блоков питания, лакировка плат, задняя крышка IP65, −30…+50 °C, 4G/GPS.</p></div>
+            <div class="iss ok"><b>Монтаж в Астане без доплаты</b><p>Подтвердили 22.10. Поставка — 3 рабочих дня, монтаж — 1 день.</p></div>
+          </div>
+        </details>
+
+        <details>
+          <summary>Смета из КП с проверкой</summary>
+          <div>
+            <div class="row" id="l-estTabs" role="group" aria-label="Вариант">
+              <button class="chip" data-p="p3">P3.076</button>
+              <button class="chip" data-p="p4">P4</button>
+            </div>
+            <table class="ptbl">
+              <thead><tr><th>Позиция</th><th class="n">Кол × цена</th><th class="n">Итог, ₸</th></tr></thead>
+              <tbody id="l-est"></tbody>
+            </table>
+            <dl class="spec" id="l-estTot"></dl>
+            <p class="note">Красным отмечены ячейки, где цифра в КП не равна «количество × цена».</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>Требования и КП</summary>
+          <div>
+            <table class="ptbl">
+              <thead><tr><th>Параметр</th><th>Требование → КП</th><th></th></tr></thead>
+              <tbody>
+                <tr><td>Габарит</td><td>~1300×500 → 1490×690 мм</td><td><span class="st ok">ок</span></td></tr>
+                <tr><td>Активная зона</td><td>~1280×480 → 1440×640 мм (9:4)</td><td><span class="st md">формат</span></td></tr>
+                <tr><td>Толщина</td><td>60–80 мм → не указана</td><td><span class="st md">уточнить</span></td></tr>
+                <tr><td>Модули</td><td>Outdoor SMD RGB → P3.076/P4, бренд не указан</td><td><span class="st md">уточнить</span></td></tr>
+                <tr><td>Яркость</td><td>5000–5500 нит + датчик → регулировка «да», нит нет</td><td><span class="st md">уточнить</span></td></tr>
+                <tr><td>Обновление</td><td>≥1920 Гц → 3840 Гц</td><td><span class="st ok">лучше</span></td></tr>
+                <tr><td>Защита</td><td>IP65 / IP54 → «да» устно</td><td><span class="st md">письменно</span></td></tr>
+                <tr><td>Температура</td><td>−30…+50 °C → не указана</td><td><span class="st md">уточнить</span></td></tr>
+                <tr><td>Контроллер</td><td>NovaStar/Huidu → Huidu HD-A3 + 4×HD-R712</td><td><span class="st ok">ок</span></td></tr>
+                <tr><td>Связь</td><td>Wi-Fi, 4G, GPS → только Wi-Fi</td><td><span class="st hi">нет 4G</span></td></tr>
+                <tr><td>Питание</td><td>12 В или инвертор → 10 БП 300 Вт на 220 В</td><td><span class="st md">генератор</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+
+        <details>
+          <summary>Хронология и условия</summary>
+          <div>
+            <ul class="tl2">
+              <li><b>19.10</b>Первое КП: модули на магнитах, каркас усиливается профтрубой.</li>
+              <li><b>20.10</b>Новые требования (~1300×500, P3/P4, IP65, 4G/GPS). Потребление 800 Вт / 1,5 кВт.</li>
+              <li><b>20.10</b>Руководитель попросил 16:9 под длину кузова. Поставщик предложил 1440×640.</li>
+              <li><b>22.10</b>Звонок, размеры одобрены. Монтаж в Астане по той же цене.</li>
+              <li><b>23.10</b>Обновлённое КП P3.076/P4, наши вопросы, спецификации на CN/EN.</li>
+              <li><b>до 02.11</b>Срок КП. Ждём исправленную смету и ответы.</li>
+            </ul>
+            <dl class="spec">
+              <div><dt>Оплата</dt><dd>70% / 30%</dd></div>
+              <div><dt>Поставка</dt><dd>3 раб. дня</dd></div>
+              <div><dt>Монтаж</dt><dd>1 раб. день</dd></div>
+              <div><dt>Гарантия</dt><dd>12 мес.</dd></div>
+              <div><dt>Не входит</dt><dd>силовой кабель</dd></div>
+            </dl>
+          </div>
+        </details>
+      </section>
     </aside>
   </div>
 
@@ -930,13 +1102,15 @@
       /* ---------- State ---------- */
       // 'orig' = paint colour exported from Blender
       const COLORS = [['Как в Blender', 'orig'], ['Белый', '#e6e9ea'], ['Чёрный', '#1c2024'], ['Серебро', '#a7aeb3'], ['Графит', '#555d63'], ['Песочный', '#b8a07a'], ['Тёмно-красный', '#7d1c1f']];
-      const DEF = { canopy: false, rack: false, pod: false, bar: false, snorkel: false, bumper: false, wheels: false, tail: false, doors: false, hood: false, xray: false, env: 'studio', speed: 40, lights: true, hazard: false, color: 'orig', dims: { overall: true, bed: false, cabin: false }, cargo: { L: 1200, W: 800, H: 150, show: true } };
+      const DEF = { canopy: false, rack: false, pod: false, bar: false, snorkel: false, bumper: false, wheels: false, tail: false, doors: false, hood: false, xray: false, env: 'studio', speed: 40, lights: true, hazard: false, color: 'orig', dims: { overall: true, bed: false, cabin: false }, cargo: { L: 1200, W: 800, H: 150, show: true },
+        pirant: { show: true, pitch: 'p3', fit: 'fit', content: 'auto', night: false, autoB: true, bright: 100, dims: true, mods: false, frame: true, gen: false, spk: true } };
       let cfg = JSON.parse(JSON.stringify(DEF)), notes = null;
       try {
         const s = JSON.parse(localStorage.getItem('hilux3d.v2') || 'null');
         if (s) { cfg = Object.assign(cfg, s.cfg || {}); notes = s.notes || null; }
         else { const o = JSON.parse(localStorage.getItem('hilux3d.v1') || 'null'); if (o) notes = o.notes || null; }
       } catch (e) { }
+      cfg.pirant = Object.assign({}, DEF.pirant, cfg.pirant || {});
       function save() { try { localStorage.setItem('hilux3d.v2', JSON.stringify({ cfg, notes })) } catch (e) { } }
 
       /* ---------- Geometry helpers (x = forward, y = up, z = right) ---------- */
@@ -976,7 +1150,8 @@
       controls.minDistance = 1.2; controls.maxDistance = 28; controls.maxPolarAngle = Math.PI * .53; controls.autoRotateSpeed = .8;
 
       if (THREE.RoomEnvironment) { const pm = new THREE.PMREMGenerator(renderer); scene.environment = pm.fromScene(new THREE.RoomEnvironment(), .04).texture; pm.dispose() }
-      scene.add(new THREE.HemisphereLight(0xeef4f8, 0x5a5146, scene.environment ? .35 : .75));
+      const envTex = scene.environment;
+      const hemi = new THREE.HemisphereLight(0xeef4f8, 0x5a5146, envTex ? .35 : .75); scene.add(hemi);
       const sun = new THREE.DirectionalLight(0xffffff, 1.35); sun.position.set(5, 9, 4); sun.castShadow = true;
       sun.shadow.mapSize.set(touch ? 1024 : 2048, touch ? 1024 : 2048); Object.assign(sun.shadow.camera, { left: -6, right: 6, top: 6, bottom: -6, near: 1, far: 25 }); sun.shadow.bias = -.0004; scene.add(sun);
       const fill = new THREE.DirectionalLight(0xdfe8ff, .45); fill.position.set(-6, 4, -5); scene.add(fill);
@@ -1096,6 +1271,15 @@
         scene.fog = e === 'road' ? new THREE.Fog(0xd6e2e8, 45, 125) : null;
         ground.material.opacity = e === 'studio' ? .22 : .32;
         $$('#envs [data-env]').forEach(b => b.setAttribute('aria-pressed', b.dataset.env === e));
+        applyNight();
+      }
+      // night mode of the PIRANT tab: dark sky, no environment light, so the LED screen glows
+      function applyNight() {
+        const n = cfg.pirant.night, dark = new THREE.Color(0x05070a);
+        if (n) { scene.background = dark; if (scene.fog) scene.fog.color.copy(dark) }
+        scene.environment = n ? null : envTex;
+        if (env.road) env.road.children[0].material.color.set(n ? 0x0a0d12 : 0xffffff); // sky dome
+        hemi.intensity = n ? .05 : envTex ? .35 : .75; sun.intensity = n ? .06 : 1.35; fill.intensity = n ? .04 : .45;
       }
       function scrollRoad(dist) {
         if (!env.road) return;
@@ -1134,6 +1318,8 @@
       let origPaint = null, bodyGroup = null, extras = null, bedFloor = .872;
       const WHEEL_R0 = .439, wheelBase = {}; // model wheel radius; original wheel positions
       function glbBuffer() {
+        // the embedded model sits after this script, so wait until the parser has reached it
+        if (document.readyState === 'loading') return new Promise(ok => document.addEventListener('DOMContentLoaded', ok, { once: true })).then(glbBuffer);
         const el = document.getElementById('pickup-glb'), b64 = el && el.textContent.trim();
         if (!b64) return fetch('pickup.glb').then(r => { if (!r.ok) throw new Error('pickup.glb не найден'); return r.arrayBuffer() });
         const bin = atob(b64), u = new Uint8Array(bin.length);
@@ -1172,6 +1358,7 @@
         bodyGroup.updateMatrixWorld(true);
         const hit = new THREE.Raycaster(new THREE.Vector3(S(4400), 1.6, 0), new THREE.Vector3(0, -1, 0)).intersectObject(bodyGroup, true)[0];
         if (hit && hit.point.y > .5 && hit.point.y < 1.2) bedFloor = hit.point.y;
+        LED.build(bodyGroup, bedFloor);
         applyColor(); applyXray(); applyLights(); buildCar(); renderPins();
         const h = $('#hint'); if (h.dataset.loading) { delete h.dataset.loading; updateHint() }
       }
@@ -1236,6 +1423,7 @@
         let top = SPEC.height / 1000;
         if (bodyGroup) bodyGroup.updateMatrixWorld(true);
         ['opt_canopy', 'opt_roof_rack', 'opt_roof_pod', 'opt_sport_bar'].forEach(n => { if (N[n] && N[n].visible) { box.setFromObject(N[n]); top = Math.max(top, box.max.y - raise) } });
+        top = Math.max(top, LED.topY());
         return Math.round((top - SPEC.height / 1000) * 1000);
       }
       function curDims() {
@@ -1265,6 +1453,7 @@
         dim('cabin', v(S(2850), 1.42 + raise, -SPEC.shoulderF / 2000), v(S(2850), 1.42 + raise, SPEC.shoulderF / 2000), 'Салон спереди', fmt(SPEC.shoulderF), X);
         dim('cabin', v(S(3400), 1.30 + raise, -SPEC.shoulderR / 2000), v(S(3400), 1.30 + raise, SPEC.shoulderR / 2000), 'Сзади', fmt(SPEC.shoulderR), X);
         Object.keys(groups).forEach(k => groups[k].visible = !!cfg.dims[k]);
+        LED.dims();
         renderSpec();
       }
       function renderSpec() {
@@ -1303,12 +1492,250 @@
         carRoot.add(cargoMesh);
       }
 
+      /* ---------- PIRANT: double-sided LED screen in the bed (sizes and prices from the supplier's KP of 23.10.2026) ---------- */
+      const LED = (function () {
+        const P = cfg.pirant;
+        const SP = { s0: 3655, s1: 5180, cabL: 1490, cabH: 690, actL: 1440, actH: 640, depth: 80, bedDepth: 480 };
+        const PITCH = {
+          p3: { name: 'P3.076', res: [468, 208], module: 10512, kp: 716571, kpVat: 831222.36 },
+          p4: { name: 'P4', res: [360, 160], module: 7920, modPrinted: 190080, kp: 621891, kpVat: 710953.56 }
+        };
+        const api = { root: new THREE.Group(), cab: null };
+        const frame = new THREE.Group(), gen = new THREE.Group(), spk = new THREE.Group(), mods = new THREE.Group(), dimsG = new THREE.Group();
+        api.root.add(frame, gen, spk, mods); scene.add(dimsG);
+        let geo = null, media = null;
+
+        // content: a 16:9 source frame composed onto a canvas with one texel per diode
+        const src = document.createElement('canvas'); src.width = 384; src.height = 216;
+        const sg = src.getContext('2d'), pix = document.createElement('canvas'), pg = pix.getContext('2d');
+        let pixTex = null;
+        const FONT = "Unbounded, 'Arial Black', sans-serif";
+        function sceneBrand(g, w, h, t) {
+          const gr = g.createLinearGradient(0, 0, w, h);
+          gr.addColorStop(0, `hsl(${190 + Math.sin(t * .4) * 20},80%,12%)`); gr.addColorStop(1, `hsl(${165 + Math.cos(t * .3) * 25},85%,24%)`);
+          g.fillStyle = gr; g.fillRect(0, 0, w, h);
+          g.strokeStyle = 'rgba(53,224,194,.2)'; g.lineWidth = 2;
+          for (let i = 0; i < 9; i++) { g.beginPath(); g.arc(w * .82, h * .5, 20 + ((i * 22 + t * 20) % 200), 0, 7); g.stroke() }
+          g.fillStyle = '#fff'; g.font = `700 62px ${FONT}`; g.textBaseline = 'middle'; g.textAlign = 'left'; g.fillText('PIRANT', 26, h * .44);
+          const x = ((t * 140) % (w + 300)) - 150, sw = g.createLinearGradient(x - 60, 0, x + 60, 0);
+          sw.addColorStop(0, 'rgba(53,224,194,0)'); sw.addColorStop(.5, 'rgba(170,255,240,.9)'); sw.addColorStop(1, 'rgba(53,224,194,0)');
+          g.save(); g.globalCompositeOperation = 'source-atop'; g.fillStyle = sw; g.fillRect(0, h * .2, w, h * .5); g.restore();
+          g.fillStyle = '#35e0c2'; g.font = "600 17px 'IBM Plex Sans', sans-serif"; g.fillText('LED-экран · Toyota Hilux · 2 стороны', 28, h * .72);
+        }
+        function sceneTest(g, w, h, t) {
+          ['#c0c0c0', '#c0c000', '#00c0c0', '#00c000', '#c000c0', '#c00000', '#0000c0'].forEach((c, i) => { g.fillStyle = c; g.fillRect(i * w / 7, 0, w / 7 + 1, h * .68) });
+          const gr = g.createLinearGradient(0, 0, w, 0); gr.addColorStop(0, '#000'); gr.addColorStop(1, '#fff');
+          g.fillStyle = gr; g.fillRect(0, h * .68, w, h * .14); g.fillStyle = '#111'; g.fillRect(0, h * .82, w, h * .18);
+          g.strokeStyle = '#fff'; g.lineWidth = 3; g.beginPath(); g.arc(w / 2, h / 2, h * .38, 0, 7); g.stroke();
+          g.strokeStyle = '#ff3b30'; g.lineWidth = 6; g.strokeRect(3, 3, w - 6, h - 6);
+          g.fillStyle = 'rgba(0,0,0,.65)'; g.fillRect(w / 2 - 70, h / 2 - 26, 140, 52);
+          g.fillStyle = '#fff'; g.font = `700 30px ${FONT}`; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('16 : 9', w / 2, h / 2 + 1);
+          g.font = "500 14px 'IBM Plex Mono', monospace"; g.fillText(new Date(t * 1000).toISOString().substr(14, 8), w / 2, h * .91); g.textAlign = 'left';
+        }
+        function sceneTicker(g, w, h, t) {
+          g.fillStyle = '#05070a'; g.fillRect(0, 0, w, h);
+          for (let i = 0; i < 14; i++) { g.fillStyle = `hsla(${(i * 26 + t * 40) % 360},90%,55%,.85)`; g.fillRect(0, (i * 37 + t * 60) % (h + 40) - 20, w, 6) }
+          g.fillStyle = 'rgba(5,7,10,.72)'; g.fillRect(0, h * .3, w, h * .4);
+          g.fillStyle = '#ffb547'; g.font = `700 44px ${FONT}`; g.textBaseline = 'middle';
+          const msg = 'PIRANT · LED 1440×640 мм · видео 16:9 · ', mw = g.measureText(msg).width, x = -((t * 120) % mw);
+          for (let k = 0; k < 4; k++) g.fillText(msg, x + k * mw, h / 2);
+        }
+        const SCENES = [sceneBrand, sceneTest, sceneTicker], DUR = 6;
+        function drawSource(t) {
+          const w = src.width, h = src.height;
+          if (media) {
+            sg.fillStyle = '#000'; sg.fillRect(0, 0, w, h);
+            const mw = media.videoWidth || media.naturalWidth, mh = media.videoHeight || media.naturalHeight;
+            if (mw && mh) { const k = Math.max(w / mw, h / mh); sg.drawImage(media, (w - mw * k) / 2, (h - mh * k) / 2, mw * k, mh * k) }
+            return;
+          }
+          const auto = P.content === 'auto';
+          SCENES[auto ? Math.floor(t / DUR) % SCENES.length : +P.content](sg, w, h, t);
+          if (auto) { const p = (t % DUR) / DUR, f = Math.max(0, 1 - p / .06, (p - .94) / .06); if (f > 0) { sg.fillStyle = `rgba(0,0,0,${Math.min(1, f)})`; sg.fillRect(0, 0, w, h) } }
+        }
+        function compose() {
+          const W = pix.width, H = pix.height;
+          pg.fillStyle = '#000'; pg.fillRect(0, 0, W, H);
+          if (P.fit === 'stretch') pg.drawImage(src, 0, 0, W, H);
+          else if (P.fit === 'fit') { const w = H * 16 / 9; pg.drawImage(src, (W - w) / 2, 0, w, H) }
+          else { const h = W * 9 / 16; pg.drawImage(src, 0, (H - h) / 2, W, h) }
+          pixTex.needsUpdate = true;
+        }
+        function setRes() {
+          const [w, h] = PITCH[P.pitch].res; pix.width = w; pix.height = h;
+          if (pixTex) pixTex.dispose();
+          pixTex = new THREE.CanvasTexture(pix); pixTex.minFilter = pixTex.magFilter = THREE.NearestFilter; pixTex.generateMipmaps = false;
+          ledMat.uniforms.map.value = pixTex; ledMat.uniforms.res.value.set(w, h);
+        }
+
+        // LED face: nearest diode colour + round diode mask, fading to the average once diodes get smaller than a screen pixel
+        const ledMat = new THREE.ShaderMaterial({
+          uniforms: { map: { value: null }, res: { value: new THREE.Vector2(468, 208) }, bright: { value: 1 } },
+          extensions: { derivatives: true },
+          vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.); }',
+          fragmentShader: [
+            'uniform sampler2D map; uniform vec2 res; uniform float bright; varying vec2 vUv;',
+            'void main(){',
+            '  vec2 p = vUv * res; vec3 c = texture2D(map, (floor(p) + .5) / res).rgb;',
+            '  float w = max(fwidth(p.x), fwidth(p.y));',
+            '  float diode = 1. - smoothstep(.34, .34 + max(w, .02), length(fract(p) - .5));',
+            '  float m = mix(diode * 1.7, .9, smoothstep(.22, .6, w));',
+            '  gl_FragColor = vec4(c * m * bright + vec3(.018, .02, .024), 1.);',
+            '}'].join('\n')
+        });
+        setRes();
+
+        // module layout overlay: 9 × 2 modules of 160 × 320 mm (320 × 160 turned by 90°)
+        const modTex = (function () {
+          const c = document.createElement('canvas'); c.width = 1440; c.height = 640; const g = c.getContext('2d');
+          g.strokeStyle = g.fillStyle = 'rgba(242,184,75,.95)'; g.lineWidth = 5;
+          g.font = "500 38px 'IBM Plex Mono', monospace"; g.textAlign = 'center'; g.textBaseline = 'middle';
+          for (let r = 0; r < 2; r++) for (let k = 0; k < 9; k++) { g.strokeRect(k * 160 + 2.5, r * 320 + 2.5, 155, 315); g.fillText(r * 9 + k + 1, k * 160 + 80, r * 320 + 160) }
+          const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; return t;
+        })();
+        const LM = {
+          steel: std({ color: 0x30363c, metalness: .6, roughness: .45 }),
+          cab: std({ color: 0x1d2228, metalness: .55, roughness: .4 }),
+          gen: std({ color: 0xc8461e, metalness: .2, roughness: .55 }),
+          genDark: std({ color: 0x1a1d20, roughness: .8 }),
+          spk: std({ color: 0x15181b, roughness: .7 }),
+          cone: std({ color: 0x2b3035, metalness: .3, roughness: .5 }),
+          mod: new THREE.MeshBasicMaterial({ map: modTex, transparent: true, depthWrite: false, toneMapped: false })
+        };
+        // boxes in model x (not s), so the screen sits exactly on the measured bed
+        function bx(x1, x2, y1, y2, z1, z2, m) { const o = mesh(new THREE.BoxGeometry(Math.abs(x2 - x1), y2 - y1, Math.abs(z2 - z1)), m); o.position.set((x1 + x2) / 2, (y1 + y2) / 2, (z1 + z2) / 2); return o }
+        function strut(a, b, r, m) { const d = b.clone().sub(a), o = mesh(new THREE.BoxGeometry(r, d.length(), r), m); o.position.copy(a).add(b).multiplyScalar(.5); o.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), d.normalize()); return o }
+        const glow = [new THREE.PointLight(0x7fd9ff, 0, 4), new THREE.PointLight(0x7fd9ff, 0, 4)];
+        glow.forEach(g => api.root.add(g));
+
+        api.build = function (parent, floor) {
+          const xc = S((SP.s0 + SP.s1) / 2), hl = SP.cabL / 2000, xF = xc + hl, xR = xc - hl;
+          const rail = floor + SP.bedDepth / 1000, t = .04, zr = .66, zi = .70, zo = zi + SP.depth / 1000;
+          const y0 = rail + t + .01, y1 = y0 + SP.cabH / 1000, ym = (y0 + y1) / 2, deck = y1 + t;
+          // rack in the bed: corner posts, bottom and top perimeter tubes, cross tubes over the bed rails (supplier's reinforcement)
+          [xF - .03, xR + .03].forEach(x => {
+            frame.add(bx(x - t / 2, x + t / 2, rail, rail + t, -zo - .02, zo + .02, LM.steel));
+            frame.add(bx(x - t / 2, x + t / 2, y1, deck, -zr - t / 2, zr + t / 2, LM.steel));
+            [-1, 1].forEach(k => frame.add(bx(x - t / 2, x + t / 2, floor, deck, k * (zr - t / 2), k * (zr + t / 2), LM.steel)));
+          });
+          [-1, 1].forEach(k => {
+            frame.add(bx(xR + .01, xF - .01, floor, floor + t, k * (zr - t / 2), k * (zr + t / 2), LM.steel), bx(xR + .01, xF - .01, y1, deck, k * (zr - t / 2), k * (zr + t / 2), LM.steel));
+            // brackets from the posts to the back of the panels
+            [xF - .03, xR + .03, xc].forEach(x => [y0 + .15, y1 - .15].forEach(y => frame.add(bx(x - .02, x + .02, y - .02, y + .02, k * (zr + t / 2), k * zi, LM.steel))));
+          });
+          [xc - .38, xc + .38].forEach(x => frame.add(bx(x - t / 2, x + t / 2, y1, deck, -zr, zr, LM.steel)));
+          // two single-sided panels on the rack edges, faces outward
+          const cabs = [];
+          [1, -1].forEach(k => {
+            const c = bx(xR, xF, y0, y1, k * zi, k * zo, LM.cab); cabs.push(c); api.root.add(c);
+            const face = new THREE.Mesh(new THREE.PlaneGeometry(SP.actL / 1000, SP.actH / 1000), ledMat);
+            face.position.set(xc, ym, k * (zo + .002)); if (k < 0) face.rotation.y = Math.PI; api.root.add(face);
+            const ov = new THREE.Mesh(face.geometry, LM.mod); ov.position.set(xc, ym, k * (zo + .0035)); ov.rotation.y = face.rotation.y; ov.renderOrder = 2; mods.add(ov);
+            api.root.add(bx(xR, xF, y1 - .025, y1, k * zo, k * (zo + .004), LM.cab), bx(xR, xF, y0, y0 + .025, k * zo, k * (zo + .004), LM.cab));
+          });
+          api.cab = cabs[0];
+          // speakers on top of the rack: two cabinets, woofer + tweeter on each side
+          const SPK = { x: .5, y: .34, z: .9 };
+          [xc - .38, xc + .38].forEach(x => {
+            spk.add(bx(x - SPK.x / 2, x + SPK.x / 2, deck, deck + SPK.y, -SPK.z / 2, SPK.z / 2, LM.spk));
+            [-1, 1].forEach(k => [[.12, .08, .15], [.045, -.13, .26]].forEach(([r, dx, dy]) => {
+              const d = mesh(new THREE.CylinderGeometry(r, r * .92, .02, 28), LM.cone); d.rotation.x = Math.PI / 2;
+              d.position.set(x + dx, deck + dy, k * (SPK.z / 2 + .008)); spk.add(d);
+            }));
+          });
+          geo = { xc, xF, xR, y0, y1, ym, floor, deck, spkTop: deck + SPK.y };
+          const gx = S(SP.s0 + 330);
+          gen.add(bx(gx - .26, gx + .26, floor, floor + .44, .16, .56, LM.gen), bx(gx - .2, gx + .2, floor + .44, floor + .47, .21, .51, LM.genDark), bx(gx - .27, gx + .27, floor + .05, floor + .38, .1, .16, LM.genDark));
+          glow[0].position.set(xc, ym, -1.8); glow[1].position.set(xc, ym, 1.8);
+          parent.add(api.root); apply();
+        };
+        // top of the visible installation in model coordinates (for the overall height)
+        api.topY = () => !geo || !P.show ? 0 : P.spk ? geo.spkTop : P.frame ? geo.deck : geo.y1;
+        // dimension lines live in world space, so they follow the lift (raise)
+        function line(a, b, tick, name, val) {
+          const tk = tick.clone().multiplyScalar(.05);
+          dimsG.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints([a, b, a.clone().add(tk), a.clone().sub(tk), b.clone().add(tk), b.clone().sub(tk)]), dimMat));
+          addLabel('lbl', `<span>${name}</span>${val}`, a.clone().lerp(b, .5), dimsG);
+        }
+        api.dims = function () {
+          dimsG.children.forEach(c => c.geometry.dispose()); dimsG.clear(); removeLabels(l => l.group === dimsG);
+          if (!geo) return;
+          const g = geo, r = raise, v = (x, y, z) => new THREE.Vector3(x, y + r, z), X = new THREE.Vector3(1, 0, 0), Y = new THREE.Vector3(0, 1, 0);
+          const top = api.topY(), h = '≈' + fmt((top + r) * 1000) + ' мм';
+          line(v(g.xR, g.y0 - .06, .86), v(g.xF, g.y0 - .06, .86), Y, 'Панель с рамкой', '1490 мм');
+          line(v(g.xR - .1, g.y0, .86), v(g.xR - .1, g.y1, .86), X, 'Высота панели', '690 мм');
+          line(new THREE.Vector3(S(5330) - .3, 0, 0), v(S(5330) - .3, top, 0), X, P.spk ? 'Авто с динамиками' : 'Авто с панелями', h);
+          dimsG.visible = P.show && P.dims;
+          $('#l-h').textContent = h;
+        };
+        api.tick = function (t) {
+          if (!api.root.visible || !api.root.parent) return;
+          drawSource(t); compose();
+        };
+
+        function brightness() { return P.autoB ? (P.night ? .55 : 1) : P.bright / 100 }
+        function apply() {
+          const b = brightness(), [rw, rh] = PITCH[P.pitch].res;
+          api.root.visible = P.show; frame.visible = P.frame; gen.visible = P.gen; spk.visible = P.spk; mods.visible = P.mods; dimsG.visible = P.show && P.dims;
+          ledMat.uniforms.bright.value = b;
+          glow.forEach(g => g.intensity = P.night ? 1.6 * b : 0);
+          $('#l-pitchNote').innerHTML = `<b>${rw} × ${rh} px</b> на сторону (${fmt(rw * rh)} точек). Модуль 320 × 160 мм.`;
+          $('#l-fitNote').innerHTML = P.fit === 'fit' ? 'Видео занимает 1138 из 1440 мм по ширине, по бокам чёрные поля ~150 мм.'
+            : P.fit === 'fill' ? 'Видео во всю ширину, но ~21% кадра срезается сверху и снизу.'
+            : `Во весь экран, но картинка растянута по ширине на 27%. Вариант — делать ролики сразу под ${rw} × ${rh} px.`;
+          $('#l-nits').textContent = `≈ ${fmt(b * 5500)} нит` + (P.autoB ? (P.night ? ' · ночь' : ' · день') : '');
+          const br = $('#l-bright'); br.disabled = P.autoB; br.value = Math.round(b * 100);
+          ['show', 'dims', 'mods', 'frame', 'gen', 'spk', 'night'].forEach(k => $('#l-' + k).checked = !!P[k]); $('#l-auto').checked = P.autoB;
+          [['#l-pitch', 'p', P.pitch], ['#l-fit', 'f', P.fit], ['#l-content', 'c', media ? '' : P.content], ['#l-estTabs', 'p', P.pitch]]
+            .forEach(([sel, a, v]) => $$(sel + ` [data-${a}]`).forEach(x => x.setAttribute('aria-pressed', x.dataset[a] === v)));
+          renderEst();
+        }
+
+        // estimate from the KP, every line re-checked as qty × price
+        const ITEMS = [['Модуль {P} 320×160 3840 Гц', 40, null], ['Блок питания 300W 60A', 10, 7130], ['Приёмная карта HD-R712', 4, 6440], ['Видеопроцессор HD-A3 Wi-Fi', 1, 36400],
+        ['UTP cat 5E 80 см', 4, 686], ['Профиль 25×90', 2, 12314], ['Шлейф 30–80 см', 40, 348, 31871], ['Кабель питания 45 см', 10, 522], ['Металлоконструкция, м²', 2.0562, 15500], ['Монтаж, м²', 2.0562, 40000, 84248]];
+        function renderEst() {
+          const v = PITCH[P.pitch], n2 = (n, d = 0) => n.toLocaleString('ru-RU', { minimumFractionDigits: d, maximumFractionDigits: d }); let sum = 0;
+          $('#l-est').innerHTML = ITEMS.map(([name, q, price, printed]) => {
+            if (price == null) { price = v.module; printed = v.modPrinted }
+            const real = Math.round(q * price); sum += real;
+            const cell = printed != null && printed !== real ? `<td class="n bad">${n2(real)}<s>в КП ${n2(printed)}</s></td>` : `<td class="n">${n2(real)}</td>`;
+            return `<tr><td>${name.replace('{P}', v.name)}</td><td class="n">${n2(q, q % 1 ? 4 : 0)} × ${n2(price)}</td>${cell}</tr>`;
+          }).join('') + `<tr class="sum"><td colspan="2">Сумма строк</td><td class="n">${n2(sum)}</td></tr>`;
+          const d = v.kp - sum;
+          $('#l-estTot').innerHTML = [['Итого в КП', n2(v.kp) + ' ₸'], ['С НДС 16% в КП', n2(v.kpVat, 2) + ' ₸'], ['С НДС по строкам', n2(sum * 1.16, 2) + ' ₸'],
+          ['Расхождение', `<span class="${d ? 'bad' : ''}" style="${d ? 'color:var(--bad)' : ''}">${d > 0 ? '+' : ''}${n2(d)} ₸</span>`]].map(([a, b]) => `<div><dt>${a}</dt><dd>${b}</dd></div>`).join('');
+        }
+
+        // panel wiring
+        function set(k, val) { P[k] = val; save(); apply(); if (k === 'show' || k === 'spk' || k === 'frame') buildDims(); if (k === 'show' && val) goView('led') }
+        ['show', 'dims', 'mods', 'frame', 'gen', 'spk'].forEach(k => $('#l-' + k).addEventListener('change', e => set(k, e.target.checked)));
+        $('#l-night').addEventListener('change', e => { P.night = e.target.checked; save(); applyEnv(); apply() });
+        $('#l-auto').addEventListener('change', e => set('autoB', e.target.checked));
+        $('#l-bright').addEventListener('input', e => set('bright', +e.target.value));
+        [['#l-pitch', 'p', 'pitch'], ['#l-estTabs', 'p', 'pitch'], ['#l-fit', 'f', 'fit'], ['#l-content', 'c', 'content']].forEach(([sel, a, k]) => $(sel).addEventListener('click', e => {
+          const v = e.target.dataset[a]; if (v == null) return;
+          if (k === 'content' && media) { if (media.pause) media.pause(); media = null }
+          P[k] = v; save(); if (k === 'pitch') setRes(); apply();
+        }));
+        $('#l-file').addEventListener('change', e => {
+          const f = e.target.files[0]; if (!f) return;
+          if (media && media.pause) media.pause();
+          const url = URL.createObjectURL(f);
+          if (f.type.startsWith('video')) { const vd = document.createElement('video'); vd.src = url; vd.muted = vd.loop = vd.playsInline = true; vd.play(); media = vd }
+          else { const im = new Image(); im.src = url; media = im }
+          apply();
+        });
+        apply();
+        return api;
+      })();
+
       /* ---------- Views & camera flight ---------- */
       let inside = false, fly = null;
       function views() {
         const r = raise; return {
           iso: [[6.4, 3.0, 5.6], [-.25, .85, 0]], front: [[8.5, 1.2, 0], [0, .95, 0]], side: [[-.1, 1.15, 9.6], [-.1, .95, 0]],
-          rear: [[-8.5, 1.6, 0], [0, .95, 0]], top: [[-.1, 12, .01], [-.1, 0, 0]], bed: [[-5.2, 3.3, 2.6], [S(4400), .95 + r, 0]],
+          rear: [[-8.5, 1.6, 0], [0, .95, 0]], top: [[-.1, 12, .01], [-.1, 0, 0]], bed: [[-5.2, 3.3, 2.6], [S(4400), .95 + r, 0]], led: [[-4.6, 2.3 + r, 6.4], [S(4100), 1.3 + r, 0]],
           driver: [[S(2850), 1.44 + r, -.38], [S(2850) + .01, 1.437 + r, -.38], 1], rearseat: [[S(3325), 1.42 + r, 0], [S(3325) + .01, 1.417 + r, 0], 1]
         }
       }
@@ -1421,7 +1848,8 @@
       /* ---------- Panel wiring ---------- */
       $$('.tab').forEach(t => t.addEventListener('click', () => {
         $$('.tab').forEach(x => x.setAttribute('aria-selected', x === t)); $$('.pane').forEach(p => p.hidden = p.dataset.pane !== t.dataset.tab);
-        if (t.dataset.tab !== 'tape' && mode === 'tape') setMode('orbit'); if (t.dataset.tab !== 'notes' && mode === 'pin') setMode('orbit')
+        if (t.dataset.tab !== 'tape' && mode === 'tape') setMode('orbit'); if (t.dataset.tab !== 'notes' && mode === 'pin') setMode('orbit');
+        if (t.dataset.tab === 'pirant' && cfg.pirant.show) goView('led')
       }));
       ['overall', 'bed', 'cabin'].forEach(k => { const el = $('#d-' + k); el.checked = !!cfg.dims[k]; el.addEventListener('change', () => { cfg.dims[k] = el.checked; groups[k].visible = el.checked; save() }) });
       const opt = { canopy: 'o-canopy', rack: 'o-rack', pod: 'o-pod', bar: 'o-bar', snorkel: 'o-snorkel', bumper: 'o-bumper', wheels: 'o-wheels' };
@@ -1475,6 +1903,7 @@
         if (N.tailgate) N.tailgate.rotation.z = ang.tail;
         if (N.hood) N.hood.rotation.z = ang.hood;
         ['door_FL', 'door_RL'].forEach(n => N[n] && (N[n].rotation.y = -ang.doors)); ['door_FR', 'door_RR'].forEach(n => N[n] && (N[n].rotation.y = ang.doors));
+        LED.tick(now / 1000);
         renderer.render(scene, camera);
         const w = stage.clientWidth, h = stage.clientHeight;
         for (const l of labels) {
