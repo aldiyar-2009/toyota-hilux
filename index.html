@@ -780,6 +780,47 @@
     .upl { display: block; border: 1px dashed var(--line); border-radius: 5px; padding: 8px; text-align: center; cursor: pointer; color: var(--muted); font-size: 12.5px }
     .upl:hover { border-color: var(--ink); color: var(--ink) }
     .upl input { display: none }
+    .projbox { display: flex; flex-direction: column; gap: 18px }
+    #app[data-tab="pirant"] .pinb { display: none !important }
+    /* kung project: equipment list, numbered markers on the model, power diagram */
+    .eql { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; border-top: 1px solid var(--line) }
+    .eql li { display: grid; grid-template-columns: 26px 1fr; gap: 2px 8px; padding: 7px 4px; border-bottom: 1px solid var(--line); cursor: pointer; border-radius: 3px }
+    .eql li:hover, .eql li.on { background: var(--surface-2) }
+    .eql li.on .eqb { background: var(--accent); color: var(--accent-ink) }
+    .eql .eqb { grid-row: span 3; width: 22px; height: 22px; border-radius: 50%; background: var(--ink); color: var(--bg); font: 600 11px/22px var(--f-mono); text-align: center }
+    .eql b { font-size: 13px; font-weight: 600 }
+    .eql span { color: var(--muted); font-size: 12px }
+    .eql small { font: 11.5px var(--f-mono); color: var(--muted); overflow-wrap: anywhere }
+    .eql small i { font-style: normal; white-space: nowrap; padding: 0 4px; border-radius: 2px; margin-right: 4px; color: #fff }
+    .eql .v220 { background: #c4621d } .eql .v12 { background: #2a6a99 } .eql .v0 { background: #6b767c }
+    .eqn { position: absolute; left: 0; top: 0; width: 22px; height: 22px; border-radius: 50%; background: var(--surface); color: var(--ink); border: 2px solid var(--ink); font: 600 11px/18px var(--f-mono); text-align: center; pointer-events: auto; cursor: pointer; box-sizing: border-box }
+    .eqn.on { background: var(--accent); color: var(--accent-ink); border-color: var(--accent-ink) }
+    .eqcard { position: absolute; left: 0; top: 0; pointer-events: none; background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 4px; padding: 6px 9px; max-width: 240px; font-size: 12px; box-shadow: 0 4px 14px rgba(0,0,0,.12) }
+    .eqcard b { display: block; font-size: 12.5px }
+    .eqcard span { color: var(--muted); font-family: var(--f-mono); font-size: 11px }
+    .pw { display: flex; flex-direction: column; gap: 4px; font-size: 12px }
+    .pw .lvl { display: flex; gap: 4px; flex-wrap: wrap }
+    .pw .nd { flex: 1 1 0; min-width: 0; border: 1px solid var(--line); border-radius: 4px; padding: 5px 7px; background: var(--surface) }
+    .pw .nd b { display: block; font-size: 12px }
+    .pw .nd span { color: var(--muted); font-size: 11.5px }
+    .pw .nd.v220 { border-left: 3px solid #c4621d } .pw .nd.v12 { border-left: 3px solid #2a6a99 }
+    .pw .arr { text-align: center; color: var(--muted); font: 11px var(--f-mono) }
+    .pw .ctr { border: 1px dashed var(--line); border-radius: 6px; padding: 8px 6px 6px; display: flex; flex-direction: column; gap: 4px }
+    .pw .ctr > h4 { margin: 0 0 2px; font: 600 11px var(--f-mono); color: var(--muted); letter-spacing: .02em }
+    .pw .ctr .nd { flex: 1 1 96px; overflow-wrap: anywhere }
+    .pw .nd[data-node] { cursor: pointer }
+    .pw .nd[data-node]:hover { background: var(--bg) }
+    .pw .nd.on { outline: 2px solid var(--accent); outline-offset: -1px }
+    .pw .nd.vups { border-left: 3px solid #c99a06 } .pw .nd.v24 { border-left: 3px solid #b3261e } .pw .nd.vpe { border-left: 3px solid #3f8f3f } .pw .nd.vneg { border-left: 3px solid #4a5257 }
+    .pw .nd s { display: block; color: var(--muted); font-size: 11px }
+    .fx { display: inline-block; font: 600 9.5px/1 var(--f-mono); font-style: normal; color: #fff; background: var(--bad); border-radius: 3px; padding: 2px 4px; margin-left: 3px; vertical-align: 1px; text-transform: uppercase; letter-spacing: .03em }
+    .pwimg { display: block; margin-top: 10px; border: 1px solid var(--line); border-radius: 4px; overflow: hidden; color: var(--muted); font-size: 12px; text-decoration: none }
+    .pwimg img { display: block; width: 100%; height: auto }
+    .pwimg span { display: block; padding: 5px 8px }
+    .pwl { position: absolute; left: 0; top: 0; pointer-events: auto; cursor: pointer; background: rgba(18,22,25,.88); color: #f2f4f5; border-left: 3px solid var(--c, #ff8a2a); border-radius: 3px; padding: 3px 7px; font-size: 11px; line-height: 1.3; white-space: nowrap }
+    .pwl b { font-weight: 600 }
+    .pwl.on { outline: 2px solid var(--accent) }
+    .ptbl input { margin: 0; accent-color: var(--ink) }
   </style>
 
   <div id="app">
@@ -944,7 +985,10 @@
       <section class="pane" data-pane="pirant" hidden>
         <div class="sec">
           <h2>Проекты PIRANT</h2>
-          <div class="row" role="group" aria-label="Проект"><button class="chip" aria-pressed="true">LED-панели на кузов</button></div>
+          <div class="row" id="projSel" role="group" aria-label="Проект"><button class="chip" data-proj="kung">Кунг связи</button><button class="chip" data-proj="led">LED-панели на кузов</button></div>
+        </div>
+        <div class="projbox" data-projbox="led">
+        <div class="sec">
           <div class="proj"><img src="sketch.png" alt="Эскиз: экран над кузовом Hilux">
             <div><b>Багажник в кузове: LED-панели по бокам, динамики сверху</b><span>Астана · Legacy Gold Company · КП от 23.10.2026 · статус: согласование</span></div>
           </div>
@@ -1076,6 +1120,83 @@
             </dl>
           </div>
         </details>
+        </div>
+
+        <div class="projbox" data-projbox="kung">
+        <div class="sec">
+          <div class="proj"><img src="kung.jpg" alt="Визуализация: оборудование в кунге Hilux, вид сзади">
+            <div><b>Кунг связи: оборудование, размещение, питание</b><span>Toyota Hilux Double Cab · кунг 1525 × 1540 × 980 мм · по списку оборудования и схеме</span></div>
+          </div>
+          <dl class="spec">
+            <div><dt>Полезный объём кунга</dt><dd>1525 × 1540 × 980</dd></div>
+            <div><dt>Между арками</dt><dd>1105 мм</dd></div>
+            <div><dt>Позиций на модели</dt><dd id="k-count">—</dd></div>
+            <div><dt>Высота авто в сборе</dt><dd id="k-h">—</dd></div>
+            <div><dt>Масса оборудования</dt><dd id="k-mass">—</dd></div>
+          </dl>
+        </div>
+
+        <div class="sec">
+          <h2>На модели</h2>
+          <label class="sw" for="k-show"><span>Показать проект</span><input type="checkbox" id="k-show"></label>
+          <label class="sw" for="k-shell"><span>Стенки кунга прозрачные<small>Чтобы было видно всё внутри</small></span><input type="checkbox" id="k-shell"></label>
+          <label class="sw" for="k-open"><span>Открыть дверь кунга и борт</span><input type="checkbox" id="k-open"></label>
+          <label class="sw" for="k-roof"><span>Багажник и оборудование на крыше</span><input type="checkbox" id="k-roof"></label>
+          <label class="sw" for="k-mast"><span>Поднять мачты<small>Камера и антенна, рабочее положение на стоянке</small></span><input type="checkbox" id="k-mast"></label>
+          <label class="sw" for="k-cable"><span>Кабельные трассы<small>Оранжевый 220 В · синий 12 В · серый — сигнал</small></span><input type="checkbox" id="k-cable"></label>
+          <label class="sw" for="k-flow"><span>Схема питания в 3D<small>Ток бежит по линиям: оранжевый — 220 В, жёлтый — 220 В после ИБП, красный — 24 В АКБ ИБП, синий — 12 В, серый — минус, зелёный — защитная земля PE</small></span><input type="checkbox" id="k-flow"></label>
+          <label class="sw" for="k-genOut"><span>Генератор снаружи, на катушке<small>Как в схеме: генератор → катушка 30 м → ввод на кунге. Выхлоп остаётся на улице</small></span><input type="checkbox" id="k-genOut"></label>
+          <label class="sw" for="k-nums"><span>Номера позиций</span><input type="checkbox" id="k-nums"></label>
+          <label class="sw" for="k-dims"><span>Размеры кунга</span><input type="checkbox" id="k-dims"></label>
+          <label class="sw" for="k-night"><span>Ночь<small>Включены свет в кунге и фонари периметра</small></span><input type="checkbox" id="k-night"></label>
+        </div>
+
+        <div class="sec">
+          <h2>Телевизор 43″</h2>
+          <div class="row" id="k-tv" role="group" aria-label="Размещение телевизора">
+            <button class="chip" data-tv="spec">Как в схеме</button>
+            <button class="chip" data-tv="ceil">Под потолком, откидной</button>
+          </div>
+          <p class="note" id="k-tvNote"></p>
+        </div>
+
+        <div class="sec">
+          <h2>Оборудование</h2>
+          <p class="note">Нажмите на строку или номер на модели — камера покажет позицию.</p>
+          <ul class="eql" id="k-list"></ul>
+        </div>
+
+        <details open>
+          <summary>Важно до монтажа</summary>
+          <div id="k-issues"></div>
+        </details>
+
+        <details open>
+          <summary>Схема электроснабжения 220 В / 12 В</summary>
+          <div>
+            <p class="note">Принципиальная схема с исправлениями. <em class="fx">исправлено</em> — то, что изменено относительно схемы на фото. Нажмите на блок — включится схема в 3D и камера покажет, где он стоит.</p>
+            <div class="pw" id="k-power"></div>
+            <a class="pwimg" href="power-scheme.jpg" target="_blank" rel="noopener"><img src="power-scheme.jpg" alt="Исходная принципиальная схема электроснабжения 220 В / 12 В (фото)"><span>Исходная схема (фото) — открыть</span></a>
+          </div>
+        </details>
+
+        <details open>
+          <summary>Что не так в схеме и как исправлено</summary>
+          <div id="k-fixes"></div>
+        </details>
+
+        <details>
+          <summary>Баланс мощности</summary>
+          <div>
+            <p class="note">По исправленной схеме: «ИБП» — через ИБП SVC RTO-1.5K (1500 ВА / 900 Вт), «Л1–Л3» — линии АВ3–АВ5 напрямую, «FU» — предохранители 12 В. Мощности — наша оценка, сверить с паспортами. Отметьте, что работает одновременно.</p>
+            <table class="ptbl">
+              <thead><tr><th></th><th>Потребитель</th><th class="n">Вт</th></tr></thead>
+              <tbody id="k-bud"></tbody>
+            </table>
+            <dl class="spec" id="k-budTot"></dl>
+          </div>
+        </details>
+        </div>
       </section>
     </aside>
   </div>
@@ -1103,7 +1224,8 @@
       // 'orig' = paint colour exported from Blender
       const COLORS = [['Как в Blender', 'orig'], ['Белый', '#e6e9ea'], ['Чёрный', '#1c2024'], ['Серебро', '#a7aeb3'], ['Графит', '#555d63'], ['Песочный', '#b8a07a'], ['Тёмно-красный', '#7d1c1f']];
       const DEF = { canopy: false, rack: false, pod: false, bar: false, snorkel: false, bumper: false, wheels: false, tail: false, doors: false, hood: false, xray: false, env: 'studio', speed: 40, lights: true, hazard: false, color: 'orig', dims: { overall: true, bed: false, cabin: false }, cargo: { L: 1200, W: 800, H: 150, show: true },
-        pirant: { show: true, pitch: 'p3', fit: 'fit', content: 'auto', night: false, autoB: true, bright: 100, dims: true, mods: false, frame: true, gen: false, spk: true } };
+        pirant: { show: true, pitch: 'p3', fit: 'fit', content: 'auto', night: false, autoB: true, bright: 100, dims: true, mods: false, frame: true, gen: false, spk: true, proj: 'kung' },
+        kung: { show: true, shell: true, open: true, roof: true, mast: false, cable: false, nums: true, dims: false, tv: 'spec', bud: null, flow: false, genOut: false } };
       let cfg = JSON.parse(JSON.stringify(DEF)), notes = null;
       try {
         const s = JSON.parse(localStorage.getItem('hilux3d.v2') || 'null');
@@ -1111,6 +1233,7 @@
         else { const o = JSON.parse(localStorage.getItem('hilux3d.v1') || 'null'); if (o) notes = o.notes || null; }
       } catch (e) { }
       cfg.pirant = Object.assign({}, DEF.pirant, cfg.pirant || {});
+      cfg.kung = Object.assign({}, DEF.kung, cfg.kung || {});
       function save() { try { localStorage.setItem('hilux3d.v2', JSON.stringify({ cfg, notes })) } catch (e) { } }
 
       /* ---------- Geometry helpers (x = forward, y = up, z = right) ---------- */
@@ -1358,7 +1481,7 @@
         bodyGroup.updateMatrixWorld(true);
         const hit = new THREE.Raycaster(new THREE.Vector3(S(4400), 1.6, 0), new THREE.Vector3(0, -1, 0)).intersectObject(bodyGroup, true)[0];
         if (hit && hit.point.y > .5 && hit.point.y < 1.2) bedFloor = hit.point.y;
-        LED.build(bodyGroup, bedFloor);
+        LED.build(bodyGroup, bedFloor); KUNG.build(bodyGroup, bedFloor);
         applyColor(); applyXray(); applyLights(); buildCar(); renderPins();
         const h = $('#hint'); if (h.dataset.loading) { delete h.dataset.loading; updateHint() }
       }
@@ -1381,7 +1504,7 @@
         raise = cfg.wheels ? WHEEL_R0 * (k - 1) + .05 : 0;
         bodyGroup.position.y = raise;
         Object.keys(wheelBase).forEach(n => { const w = N[n], p = wheelBase[n]; w.scale.setScalar(k); w.position.set(p.x, p.y * k, p.z + Math.sign(p.z) * (cfg.wheels ? .03 : 0)) });
-        [['opt_canopy', 'canopy'], ['opt_roof_rack', 'rack'], ['opt_roof_pod', 'pod'], ['opt_sport_bar', 'bar']].forEach(([n, key]) => { if (N[n]) N[n].visible = !!cfg[key] });
+        [['opt_canopy', 'canopy'], ['opt_roof_rack', 'rack'], ['opt_roof_pod', 'pod'], ['opt_sport_bar', 'bar']].forEach(([n, key]) => { if (N[n]) N[n].visible = !!cfg[key] && !(key === 'canopy' && KUNG.on()) });
 
         // code-drawn accessories that the Blender model does not have
         disposeTree(extras); extras.clear();
@@ -1423,7 +1546,7 @@
         let top = SPEC.height / 1000;
         if (bodyGroup) bodyGroup.updateMatrixWorld(true);
         ['opt_canopy', 'opt_roof_rack', 'opt_roof_pod', 'opt_sport_bar'].forEach(n => { if (N[n] && N[n].visible) { box.setFromObject(N[n]); top = Math.max(top, box.max.y - raise) } });
-        top = Math.max(top, LED.topY());
+        top = Math.max(top, LED.topY(), KUNG.topY());
         return Math.round((top - SPEC.height / 1000) * 1000);
       }
       function curDims() {
@@ -1453,7 +1576,7 @@
         dim('cabin', v(S(2850), 1.42 + raise, -SPEC.shoulderF / 2000), v(S(2850), 1.42 + raise, SPEC.shoulderF / 2000), 'Салон спереди', fmt(SPEC.shoulderF), X);
         dim('cabin', v(S(3400), 1.30 + raise, -SPEC.shoulderR / 2000), v(S(3400), 1.30 + raise, SPEC.shoulderR / 2000), 'Сзади', fmt(SPEC.shoulderR), X);
         Object.keys(groups).forEach(k => groups[k].visible = !!cfg.dims[k]);
-        LED.dims();
+        LED.dims(); KUNG.dims();
         renderSpec();
       }
       function renderSpec() {
@@ -1485,7 +1608,7 @@
         const title = { ok: 'Помещается', tail: 'Помещается с открытым бортом', no: 'Не помещается' }[r.state];
         const res = $('#cRes'); res.className = 'result ' + (r.state === 'ok' ? '' : r.state);
         res.innerHTML = `<b>${title}</b>` + r.msgs.map(m => `<p>${m}</p>`).join('');
-        if (!show) return;
+        if (!show || KUNG.on()) return;
         const s0 = r.over ? 4435 : 3655, cs = getComputedStyle(document.documentElement);
         M.cargo.color.set(cs.getPropertyValue(r.state === 'ok' ? '--ok' : r.state === 'tail' ? '--accent' : '--bad').trim());
         cargoMesh = bs(s0, s0 + L, bedFloor + raise, bedFloor + raise + H / 1000, -W / 2000, W / 2000, M.cargo); cargoMesh.castShadow = false; cargoMesh.userData.nopick = true;
@@ -1650,7 +1773,7 @@
           parent.add(api.root); apply();
         };
         // top of the visible installation in model coordinates (for the overall height)
-        api.topY = () => !geo || !P.show ? 0 : P.spk ? geo.spkTop : P.frame ? geo.deck : geo.y1;
+        api.topY = () => !geo || !P.show || P.proj !== 'led' ? 0 : P.spk ? geo.spkTop : P.frame ? geo.deck : geo.y1;
         // dimension lines live in world space, so they follow the lift (raise)
         function line(a, b, tick, name, val) {
           const tk = tick.clone().multiplyScalar(.05);
@@ -1665,7 +1788,7 @@
           line(v(g.xR, g.y0 - .06, .86), v(g.xF, g.y0 - .06, .86), Y, 'Панель с рамкой', '1490 мм');
           line(v(g.xR - .1, g.y0, .86), v(g.xR - .1, g.y1, .86), X, 'Высота панели', '690 мм');
           line(new THREE.Vector3(S(5330) - .3, 0, 0), v(S(5330) - .3, top, 0), X, P.spk ? 'Авто с динамиками' : 'Авто с панелями', h);
-          dimsG.visible = P.show && P.dims;
+          dimsG.visible = P.show && P.proj === 'led' && P.dims;
           $('#l-h').textContent = h;
         };
         api.tick = function (t) {
@@ -1676,7 +1799,7 @@
         function brightness() { return P.autoB ? (P.night ? .55 : 1) : P.bright / 100 }
         function apply() {
           const b = brightness(), [rw, rh] = PITCH[P.pitch].res;
-          api.root.visible = P.show; frame.visible = P.frame; gen.visible = P.gen; spk.visible = P.spk; mods.visible = P.mods; dimsG.visible = P.show && P.dims;
+          api.root.visible = P.show && P.proj === 'led'; frame.visible = P.frame; gen.visible = P.gen; spk.visible = P.spk; mods.visible = P.mods; dimsG.visible = P.show && P.proj === 'led' && P.dims;
           ledMat.uniforms.bright.value = b;
           glow.forEach(g => g.intensity = P.night ? 1.6 * b : 0);
           $('#l-pitchNote').innerHTML = `<b>${rw} × ${rh} px</b> на сторону (${fmt(rw * rh)} точек). Модуль 320 × 160 мм.`;
@@ -1726,6 +1849,546 @@
           else { const im = new Image(); im.src = url; media = im }
           apply();
         });
+        api.apply = apply;
+        apply();
+        return api;
+      })();
+
+      /* ---------- PIRANT: communications kung (equipment list, layout and power scheme of the project document) ---------- */
+      const KUNG = (function () {
+        const K = cfg.kung, P = cfg.pirant;
+        const api = { root: new THREE.Group() };
+        const roofG = new THREE.Group(), cables = new THREE.Group(), dimsG = new THREE.Group(), cardG = new THREE.Group();
+        const tvG = { spec: new THREE.Group(), ceil: new THREE.Group() };
+        api.root.add(roofG, cables, tvG.spec, tvG.ceil); scene.add(dimsG);
+        let geo = null, hatch = null, tvPivot = null, hatchA = 0, tvA = 0, mastE = 0, sel = -1, hl = null, card = null;
+        const walls = [], windows = [], masts = [], spots = [], HATCH = 1.75;
+        const inLight = new THREE.PointLight(0xfff1dc, 0, 3.2);
+        const KM = {
+          glass: new THREE.MeshStandardMaterial({ color: 0xdfe9ef, transparent: true, opacity: .12, roughness: .1, depthWrite: false, side: THREE.DoubleSide }),
+          hatch: new THREE.MeshStandardMaterial({ color: 0x51626c, transparent: true, opacity: .3, roughness: .1, depthWrite: false, side: THREE.DoubleSide }),
+          paint: std2({ color: 0xe9ecee, roughness: .45, metalness: .1 }),
+          frame: std2({ color: 0xcfd4d7, roughness: .5, metalness: .3 }),
+          win: std2({ color: 0x1d262c, roughness: .1, metalness: .3 }),
+          alu: std2({ color: 0xb9c0c5, roughness: .45, metalness: .6 }),
+          steel: std2({ color: 0x2f3539, roughness: .5, metalness: .55 }),
+          black: std2({ color: 0x1c1f22, roughness: .7 }),
+          dark: std2({ color: 0x2b3034, roughness: .6, metalness: .2 }),
+          white: std2({ color: 0xeceeef, roughness: .5 }),
+          red: std2({ color: 0xb3261e, roughness: .45, metalness: .25 }),
+          orange: std2({ color: 0xd9822b, roughness: .5 }),
+          screen: std2({ color: 0x0c1014, roughness: .15, metalness: .4 }),
+          c220: std2({ color: 0xd9732b, roughness: .6 }), c12: std2({ color: 0x2f6fb0, roughness: .6 }), cSig: std2({ color: 0x7c868c, roughness: .6 }),
+          warn: new THREE.MeshBasicMaterial({ color: 0xef4b3a, transparent: true, opacity: .4, depthWrite: false }),
+          lamp: new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: 0xfff3dc, emissiveIntensity: 0 }),
+          flood: new THREE.MeshStandardMaterial({ color: 0xdde3e6, emissive: 0xffffff, emissiveIntensity: 0 }),
+          pe: std2({ color: 0x3f9a46, roughness: .4, metalness: .5 })
+        };
+        // bed coordinates: s = mm from the front bumper, h = m above the bed floor, z = m (left < 0 < right)
+        let F = .872;
+        function bx(x1, x2, y1, y2, z1, z2, m) { const o = mesh(new THREE.BoxGeometry(Math.abs(x2 - x1), Math.abs(y2 - y1), Math.abs(z2 - z1)), m); o.position.set((x1 + x2) / 2, (y1 + y2) / 2, (z1 + z2) / 2); return o }
+        const b = (s1, s2, h1, h2, z1, z2, m) => bx(S(s1), S(s2), F + h1, F + h2, z1, z2, m);
+        const pt = (s, h, z) => new THREE.Vector3(S(s), F + h, z);
+        function rod(a, c, r, m) { const d = c.clone().sub(a), o = mesh(new THREE.CylinderGeometry(r, r, d.length(), 10), m); o.position.copy(a).add(c).multiplyScalar(.5); o.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), d.normalize()); return o }
+        function pipe(g, pts, r, m) { pts = pts.map(p => pt(...p)); for (let i = 1; i < pts.length; i++) g.add(rod(pts[i - 1], pts[i], r, m)) }
+        function cylX(r, len, m, p) { const o = mesh(new THREE.CylinderGeometry(r, r, len, 24), m); o.rotation.z = Math.PI / 2; o.position.copy(p); return o }
+        // front panel texture of a rack unit or device; faces the door (-x)
+        function face(title, sub, o = {}) {
+          const ch = Math.max(24, Math.round(512 * (o.h || 44.45) / (o.w || 482.6)));
+          const t = canvasTex(512, ch, (g, w, h) => {
+            g.fillStyle = o.bg || '#2a2f33'; g.fillRect(0, 0, w, h);
+            if (!o.w) { g.fillStyle = 'rgba(0,0,0,.35)'; g.fillRect(0, 0, 16, h); g.fillRect(w - 16, 0, 16, h) }
+            g.fillStyle = o.fg || '#e8ecee'; g.textBaseline = 'middle';
+            g.font = `600 ${Math.round(Math.min(26, h * .36))}px 'IBM Plex Sans', sans-serif`; g.fillText(title, 30, sub ? h * .36 : h / 2);
+            if (sub) { g.font = `400 ${Math.round(Math.min(16, h * .22))}px 'IBM Plex Mono', monospace`; g.globalAlpha = .7; g.fillText(sub, 30, h * .72); g.globalAlpha = 1 }
+            if (o.lcd) { g.fillStyle = '#4f9fd8'; g.fillRect(w * .58, h * .22, w * .18, h * .56) }
+            for (let i = 0; i < (o.leds == null ? 3 : o.leds); i++) { g.fillStyle = i % 3 === 2 ? '#f0b429' : '#3ddc84'; g.beginPath(); g.arc(w - 36 - i * 15, h / 2, Math.min(4, h * .1), 0, 7); g.fill() }
+          });
+          t.wrapS = t.wrapT = THREE.ClampToEdgeWrapping; t.repeat.set(1, 1);
+          return std2({ color: 0xffffff, map: t, roughness: .5, metalness: .2 });
+        }
+        // box whose door-facing side shows a label
+        function dev(s1, s2, h1, h2, z1, z2, body, f) { const o = b(s1, s2, h1, h2, z1, z2, body); o.material = [body, f, body, body, body, body]; return o }
+
+        // equipment register: numbers follow the project scheme (1–9), then the new equipment
+        const EQ = [
+          { n: 1, name: 'Спутниковый и проводной телефоны', sub: 'Iridium 9555 с док-станцией · teXet TX-215', size: 'док 200×120×70, телефон 210×100×60', pw: '220 В через ИБП · teXet 12 В', v: 'v220', where: 'левая полка', m: 2.5 },
+          { n: 2, name: 'Воздушный отопитель 1,5 кВт', sub: 'бензиновый, топливо из основного бака', size: '410×370×170', pw: '12 В', v: 'v12', where: 'левая стенка над полкой', m: 9 },
+          { n: 3, name: 'Катушка с силовым кабелем 30 м', sub: 'от генератора к вводу на кунге (3×2,5); под нагрузкой разматывать полностью', size: '295×225×375', pw: 'ввод 220 В', v: 'v220', where: 'под левой полкой, у двери', m: 10 },
+          { n: 4, name: 'LED-телевизор 43″ на кронштейне', sub: 'TCL 43V6C · кронштейн Brateck', size: '957×558×72', pw: '220 В', v: 'v220', where: 'правая полка, у двери', m: 11 },
+          { n: 5, name: 'Принтер Pantum M6202W', sub: 'лазерное МФУ', size: '417×305×244', pw: '220 В', v: 'v220', where: 'правая полка, в глубине', m: 7.5 },
+          { n: 6, name: 'Бензиновая электростанция', sub: 'HUTER DN2700Si, инверторный, 2,3 кВт номинал', size: '300×540×540', pw: 'источник 220 В', v: 'v220', where: 'за правой аркой на слайдере; в работе — снаружи, на катушке', m: 22 },
+          { n: 7, name: 'Телекоммуникационная стойка 19″ 12U', sub: 'ИБП SVC RTO-1.5K (1500 ВА / 900 Вт) · стабилизатор SVEN AVR SLIM-2000 · Hytera HR1065 · контроллер AKS · дуплексер Jesai · MikroTik · шифратор', size: '≈560×560×620', pw: '220 В', v: 'v220', where: 'по центру у передней стенки', m: 48 },
+          { n: 8, name: 'Терминал Starlink mini', sub: 'на площадке багажника', size: '298,5×259×38,5', pw: '220 / 12 В', v: 'v220', where: 'крыша, слева', m: 1.5, roof: 1 },
+          { n: 9, name: 'Спутниковая антенна AKS', sub: 'бортовая система, сер. № 2000000407517', size: '≈1200×1000', pw: '220 В через ИБП', v: 'v220', where: 'крыша, по центру', m: 35, roof: 1 },
+          { n: 10, name: 'АКБ ИБП 2 × 12 В 100 А·ч', sub: 'AGM, последовательно = 24 В, автомат DC 63 А (в схеме — одна АКБ 12 В 100 А·ч)', size: '2 × 330×173×220', pw: '24 В → ИБП', v: 'v12', where: 'у правой стенки, рядом со стойкой', m: 60 },
+          { n: 11, name: 'Блок 12 В', sub: 'рубильник QS2 · реле разряда 11,8 В · FU2 10 А свет · FU3 15 А связь · FU4 20 А отопитель · FU5 15 А фонари · минусовая шина', size: '≈250×125×95', pw: '12 В от бортовой АКБ', v: 'v12', where: 'на левой арке', m: 3 },
+          { n: 12, name: 'Щит 220 В и ввод', sub: 'вилка-ввод 16 А IP67 · АВ1 АВДТ C16 30 мА · АВ2 C10 · АВ3 B6 · АВ4 B10 · АВ5 B10 · шина PE, перемычка N–PE', size: 'щит ≈300×320×100', pw: '220 В', v: 'v220', where: 'передняя стенка слева; ввод — левый борт у двери', m: 6 },
+          { n: 13, name: 'Мачта с камерой', sub: 'HiWatch DS-I215(D) на телескопической мачте', size: 'камера Ø166×290', pw: '220 В через ИБП', v: 'v220', where: 'крыша, сзади слева', m: 8, roof: 1 },
+          { n: 14, name: 'Мачта антенны', sub: 'антенна ретранслятора через дуплексер', size: '—', pw: 'сигнал', v: 'v0', where: 'крыша, сзади справа', m: 6, roof: 1 },
+          { n: 15, name: 'Фонари периметра', sub: 'LED в защищённом корпусе, управление каждым из кабины и из кунга', size: '4 шт.', pw: '12 В', v: 'v12', where: 'углы багажника', m: 4, roof: 1 },
+          { n: 16, name: 'Свет в кунге', sub: 'светодиодные светильники на потолке (по ТЗ 2–4)', size: '4 шт.', pw: '12 В', v: 'v12', where: 'потолок', m: 1.5 },
+          { n: 17, name: 'Огнетушитель и аптечка', sub: 'аптечка в кейсе', size: '—', pw: '—', v: 'v0', where: 'у стойки слева, левая полка', m: 5 },
+          { n: 18, name: 'Экспедиционный багажник', sub: 'усиленный, должен выдерживать двух человек', size: '≈1480×1400', pw: '—', v: 'v0', where: 'крыша кунга', m: 35, roof: 1 }
+        ];
+        EQ.forEach(it => { it.obj = new THREE.Group(); it.lg = new THREE.Group(); (it.roof ? roofG : api.root).add(it.obj) });
+        const objOf = it => it.n === 4 ? tvG[K.tv] : it.obj;
+
+        api.build = function (parent, floor) {
+          F = floor + .03; // top of the bed liner
+          const W = .80, IW = .765, yb = .50, yt = .98, sf = 3645, sr = 5280, RT = 1.085;
+          // shell: walls swap between glass and paint, the frame stays
+          const shell = new THREE.Group(); api.root.add(shell);
+          [b(sf, sr, yb, yt, -W, -W + .02), b(sf, sr, yb, yt, W - .02, W), b(sf, sf + 20, yb, yt, -W, W), b(sf, sr, yt, yt + .03, -W, W)].forEach(o => { walls.push(o); shell.add(o) });
+          [-1, 1].forEach(k => {
+            shell.add(b(sf, sr, yb, yb + .04, k * (W - .035), k * W, KM.frame), b(sf, sr, yt - .02, yt + .035, k * (W - .035), k * W, KM.frame));
+            shell.add(b(sf, sf + 35, yb, yt + .03, k * (W - .035), k * W, KM.frame), b(sr - 35, sr, yb, yt + .03, k * (W - .045), k * W, KM.frame));
+            const w1 = b(3800, 4650, yb + .1, yt - .08, k * (W + .003), k * (W - .023), KM.win), w2 = b(4720, 5180, yb + .1, yt - .08, k * (W + .003), k * (W - .023), KM.win);
+            windows.push(w1, w2); shell.add(w1, w2);
+          });
+          shell.add(b(sr - 35, sr, yt - .02, yt + .035, -W, W, KM.frame));
+          // rear door: glass hatch hinged at the roof, opens upwards
+          hatch = new THREE.Group(); hatch.position.copy(pt(sr, yt, 0)); shell.add(hatch);
+          const hh = yt - yb - .02;
+          hatch.add(bx(-.012, 0, -hh, 0, -W + .04, W - .04, KM.hatch));
+          [[-hh, -hh + .05], [-.05, 0]].forEach(([y1, y2]) => hatch.add(bx(-.03, 0, y1, y2, -W + .03, W - .03, KM.frame)));
+          [-1, 1].forEach(k => hatch.add(bx(-.03, 0, -hh, 0, k * (W - .08), k * (W - .03), KM.frame)));
+          hatch.add(bx(-.05, -.03, -hh + .02, -hh + .07, -.12, .12, KM.black)); // handle
+
+          // shelves along both sides at 600 mm (the generator under the right one is 540 mm tall)
+          [-1, 1].forEach(k => {
+            api.root.add(b(3662, 5250, .575, .60, k * IW, k * .34, KM.alu), b(3662, 5250, .60, .625, k * .355, k * .34, KM.alu));
+            [3680, 4430, 5240].forEach(s => api.root.add(b(s - 12, s + 12, 0, .575, k * .372, k * .348, KM.alu)));
+            api.root.add(rod(pt(5240, .30, k * .75), pt(5240, .57, k * .40), .009, KM.alu));
+          });
+          // floor mat + rigging rails along the sides
+          api.root.add(b(3662, 5255, 0, .006, -.55, .55, KM.black));
+          [-1, 1].forEach(k => api.root.add(b(3662, 5255, .006, .02, k * .335, k * .315, KM.alu)));
+
+          // 1: Iridium dock with handset, teXet desk phone
+          let g = EQ[0].obj;
+          g.add(b(4880, 5000, .60, .67, -.64, -.44, KM.black), b(4925, 4955, .67, .813, -.565, -.51, KM.dark), rod(pt(4940, .79, -.525), pt(4940, .88, -.525), .006, KM.black));
+          g.add(b(5020, 5120, .60, .66, -.67, -.46, KM.dark), b(5028, 5112, .66, .69, -.66, -.60, KM.black));
+          // 2: air heater on the left wall, warm air outlet towards the door
+          g = EQ[1].obj;
+          g.add(dev(4350, 4760, .605, .975, -.765, -.60, KM.black, face('PLANAR', 'отопитель 1,5 кВт', { w: 170, h: 370, bg: '#1c1f22', leds: 1 })));
+          g.add(cylX(.045, .06, KM.dark, pt(4790, .85, -.68)), b(4520, 4600, .76, .80, -.60, -.598, KM.orange));
+          // 3: cable reel, axis along the car, socket to the door
+          g = EQ[2].obj; const zc = -.615;
+          [4905, 5120].forEach(s => g.add(rod(pt(s, 0, zc - .14), pt(s, .2, zc), .009, KM.alu), rod(pt(s, 0, zc + .14), pt(s, .2, zc), .009, KM.alu), rod(pt(s, .2, zc), pt(s, .37, zc), .009, KM.alu), rod(pt(s, .006, zc - .15), pt(s, .006, zc + .15), .009, KM.alu)));
+          g.add(rod(pt(4905, .37, zc), pt(5120, .37, zc), .012, KM.alu), cylX(.13, .19, KM.black, pt(5012, .2, zc)));
+          [4915, 5110].forEach(s => g.add(cylX(.148, .006, KM.alu, pt(s, .2, zc))));
+          g.add(b(5122, 5140, .15, .25, zc - .05, zc + .05, KM.orange));
+          // 4a: TV as in the scheme — folded on the swing arm over the right shelf; red = above the roof
+          g = tvG.spec;
+          g.add(b(4520, 4780, .68, .90, .70, .765, KM.black), b(4180, 5137, .605, 1.163, .62, .692, KM.black), b(4190, 5127, .615, 1.153, .618, .62, KM.screen));
+          const red = b(4170, 5147, yt, 1.168, .612, .70, KM.warn); red.castShadow = false; red.userData.nopick = true; red.renderOrder = 3; g.add(red);
+          // 4b: TV under the roof by the door, flips down screen-out when the door is open
+          tvPivot = new THREE.Group(); tvPivot.position.copy(pt(5200, .962, 0)); tvG.ceil.add(tvPivot);
+          tvPivot.add(bx(0, .558, -.072, 0, -.4785, .4785, KM.black), bx(.01, .548, -.074, -.072, -.468, .468, KM.screen), bx(-.03, .03, -.02, .01, -.3, .3, KM.steel));
+          // 5: printer deep on the right shelf
+          g = EQ[4].obj;
+          g.add(dev(3700, 4117, .60, .80, .44, .745, KM.white, face('PANTUM', 'M6202W', { w: 305, h: 200, bg: '#eceeef', fg: '#2b3034', leds: 2 })), b(3720, 4097, .80, .844, .46, .725, KM.dark));
+          // 6: generator behind the right arch, turned across the car, on a slider; controls to the door
+          g = EQ[5].obj; const s1 = 4900, s2 = 5200, z1 = .225, z2 = .765, h0 = .03, h1 = .555;
+          [4940, 5160].forEach(s => g.add(b(s - 20, s + 20, 0, .03, z1, z2, KM.steel)));
+          const cs = [[s1, z1], [s1, z2], [s2, z2], [s2, z1]];
+          cs.forEach(([s, z], i) => { g.add(rod(pt(s, h0, z), pt(s, h1, z), .013, KM.black)); const [sn, zn] = cs[(i + 1) % 4]; [h0, h1].forEach(h => g.add(rod(pt(s, h, z), pt(sn, h, zn), .013, KM.black))) });
+          g.add(b(s1 + 25, s2 - 25, .37, .53, z1 + .03, z2 - .03, KM.red), b(s1 + 30, s2 - 50, .07, .34, z1 + .05, z1 + .30, KM.dark));
+          const alt = mesh(new THREE.CylinderGeometry(.11, .11, .2, 24), KM.red); alt.rotation.x = Math.PI / 2; alt.position.copy(pt(5040, .2, z2 - .14)); g.add(alt,  dev(s2 - 40, s2 - 12, .1, .34, z1 + .04, z2 - .04, KM.black, face('ГЕНЕРАТОР', '220 В', { w: 260, h: 240, bg: '#16191b', leds: 2 })));
+          // 7: 19" rack, 12U open frame on anti-vibration mounts, fronts to the door
+          g = EQ[6].obj; const rf = 3665, rr = 4225, U = .04445, hb = .05, rz = .265;
+          [-1, 1].forEach(k => [rf + 15, rr - 15].forEach(s => {
+            g.add(b(s - 15, s + 15, hb, hb + 12 * U + .02, k * (rz - .03), k * rz, KM.steel));
+            const m = mesh(new THREE.CylinderGeometry(.025, .025, hb, 12), KM.black); m.position.copy(pt(s, hb / 2, k * (rz - .05))); g.add(m);
+          }));
+          [hb - .01, hb + 12 * U + .01].forEach(h => g.add(b(rf, rr, h, h + .015, -rz, rz, KM.steel)));
+          const xf = rr - 20, uh = n => hb + .005 + n * U;
+          const unit = (u, n, depth, f) => g.add(dev(xf - depth * 1000, xf, uh(u), uh(u + n) - .003, -.241, .241, KM.dark, f));
+          const shelf = u => g.add(b(xf - 420, xf, uh(u), uh(u) + .004, -.241, .241, KM.steel));
+          unit(0, 2, .45, face('SVC RTO-1.5K-LCD', 'ИБП 1500 ВА', { h: 2 * U * 1000, lcd: 1, bg: '#23272a' }));
+          shelf(2); g.add(dev(xf - 175, xf - 5, uh(2) + .004, uh(2) + .064, -.20, .09, KM.dark, face('SVEN AVR SLIM-2000', 'стабилизатор', { w: 290, h: 60, lcd: 1, bg: '#30363b', leds: 1 })));
+          unit(4, 1, .365, face('HYTERA HR1065', 'DMR-ретранслятор', { lcd: 1, bg: '#1f2326' }));
+          unit(6, 2, .35, face('Контроллер AKS', 'спутниковая антенна', { h: 2 * U * 1000, bg: '#d9dee1', fg: '#1c2226', lcd: 1 }));
+          shelf(8); g.add(dev(xf - 155, xf - 5, uh(8) + .004, uh(8) + .037, -.22, 0, KM.dark, face('JESAI', 'дуплексер', { w: 220, h: 33, bg: '#3a4046', leds: 0 })));
+          shelf(9); g.add(dev(xf - 140, xf - 5, uh(9) + .004, uh(9) + .044, -.22, -.02, KM.dark, face('MikroTik', '', { w: 200, h: 40, bg: '#2d3338', leds: 5 })), dev(xf - 150, xf - 5, uh(9) + .004, uh(9) + .049, .01, .21, KM.dark, face('Шифратор', '', { w: 200, h: 45, bg: '#3b2f2f', leds: 2 })));
+          [-.15, -.07].forEach(z => g.add(rod(pt(xf - 60, hb + 12 * U + .025, z), pt(xf - 60, hb + 12 * U + .2, z), .006, KM.black)));
+          // 8, 9, 13–15, 18: roof rack and what stands on it
+          g = EQ[17].obj;
+          [3700, 4460, 5220].forEach(s => [-1, 1].forEach(k => g.add(b(s - 20, s + 20, yt + .03, RT - .015, k * .66, k * .70, KM.black))));
+          [-1, 1].forEach(k => { g.add(rod(pt(3680, RT, k * .70), pt(5240, RT, k * .70), .018, KM.black), rod(pt(3680, RT + .1, k * .70), pt(5240, RT + .1, k * .70), .014, KM.black)); [3680, 4200, 4720, 5240].forEach(s => g.add(rod(pt(s, RT, k * .70), pt(s, RT + .1, k * .70), .012, KM.black))) });
+          [3680, 5240].forEach(s => g.add(rod(pt(s, RT, -.70), pt(s, RT, .70), .018, KM.black)));
+          for (let s = 3760; s < 5220; s += 140) g.add(b(s - 25, s + 25, RT - .015, RT, -.69, .69, KM.black));
+          g = EQ[7].obj;
+          g.add(rod(pt(4950, RT, -.42), pt(4950, RT + .16, -.42), .016, KM.dark));
+          const sl = bx(-.1295, .1295, -.019, .019, -.149, .149, KM.white); sl.position.copy(pt(4950, RT + .2, -.42)); sl.rotation.z = .35; g.add(sl);
+          g = EQ[8].obj; const ak = pt(4250, 0, .15);
+          g.add(b(4040, 4460, RT, RT + .1, -.06, .36, KM.white));
+          const tur = mesh(new THREE.CylinderGeometry(.1, .12, .2, 24), KM.frame); tur.position.set(ak.x, F + RT + .2, ak.z); g.add(tur);
+          const dish = new THREE.Group(); dish.position.set(ak.x, F + RT + .37, ak.z); dish.rotation.z = .35; g.add(dish);
+          const disc = mesh(new THREE.CylinderGeometry(.5, .5, .05, 48), KM.white); disc.scale.z = .84; dish.add(disc);
+          const back = mesh(new THREE.ConeGeometry(.42, .12, 40), KM.frame); back.rotation.x = Math.PI; back.position.y = -.085; back.scale.z = .84; dish.add(back);
+          // 13, 14: telescopic masts at the rear corners
+          const SEG = .55, R = [.03, .025, .02, .015];
+          [[12, -1], [13, 1]].forEach(([i, k]) => {
+            const mg = EQ[i].obj, base = pt(5200, RT, k * .60);
+            mg.add(b(5165, 5235, RT - .01, RT + .09, k * .56, k * .64, KM.steel));
+            const segs = R.map(r => { const m = mesh(new THREE.CylinderGeometry(r, r, SEG, 14), KM.alu); m.position.set(base.x, 0, base.z); mg.add(m); return m });
+            const top = new THREE.Group(); top.position.set(base.x, 0, base.z); mg.add(top);
+            if (k < 0) { const c = mesh(new THREE.CylinderGeometry(.083, .083, .2, 24), KM.white); c.position.y = .1; const d = mesh(new THREE.SphereGeometry(.07, 20, 12), KM.screen); d.position.y = .0; top.add(c, d); top.userData.lift = .07 }
+            else { const c = mesh(new THREE.CylinderGeometry(.02, .03, .1, 12), KM.black); c.position.y = .05; const w = mesh(new THREE.CylinderGeometry(.005, .007, .9, 8), KM.black); w.position.y = .55; top.add(c, w); top.userData.lift = 0; top.userData.whip = w }
+            masts.push({ segs, top, y0: base.y });
+          });
+          // 15: floodlights on the rack corners, aimed outwards
+          g = EQ[14].obj;
+          [[3700, -1], [3700, 1], [5220, -1], [5220, 1]].forEach(([s, k]) => {
+            const p = pt(s, RT + .14, k * .72), fl = bx(-.05, .05, -.035, .035, -.04, .04, KM.flood); fl.position.copy(p); g.add(fl);
+            const sp = new THREE.SpotLight(0xf4f6ff, 0, 11, .75, .55, 1.4); sp.position.copy(p); sp.target.position.copy(pt(s + (s < 4000 ? -1500 : 1500), -.9, k * 3.2)); g.add(sp, sp.target); spots.push(sp);
+          });
+          // 16: ceiling lights above both shelves
+          g = EQ[15].obj;
+          [4000, 4850].forEach(s => [-1, 1].forEach(k => g.add(b(s - 150, s + 150, .965, .98, k * .54, k * .66, KM.lamp))));
+          inLight.position.copy(pt(4400, .85, 0)); g.add(inLight);
+          // 10: two 12 V AGM in series (24 V) for the UPS, beside the rack; DC breaker on top
+          g = EQ[9].obj;
+          [[3700, 4030], [4040, 4370]].forEach(([a, c]) => {
+            g.add(b(a, c, 0, .21, .33, .503, KM.black), b(a, c, .21, .22, .335, .498, KM.dark));
+            [[a + 40, KM.red], [c - 40, KM.black]].forEach(([s, m]) => { const t = mesh(new THREE.CylinderGeometry(.013, .013, .025, 12), m); t.position.copy(pt(s, .232, .415)); g.add(t) });
+          });
+          g.add(b(3800, 3860, .22, .30, .36, .46, KM.white));
+          // 11: 12 V block on the left arch: QS2 switch, low-voltage relay, fuses FU2–FU5, minus bus
+          g = EQ[10].obj;
+          g.add(dev(3990, 4240, .265, .36, -.745, -.62, KM.dark, face('БЛОК 12 В', 'QS2 · LVD · FU2–FU5', { w: 250, h: 95, bg: '#24303a', leds: 4 })));
+          g.add(b(4045, 4085, .36, .40, -.70, -.66, KM.red), b(4250, 4290, .265, .29, -.745, -.64, KM.black));
+          // 12: 220 V board on the front wall (АВ1–АВ5), PE bus at the floor, inlet on the left side by the door
+          g = EQ[11].obj;
+          g.add(b(3662, 3762, .63, .95, -.70, -.40, KM.white));
+          const pf = face('ЩИТ 220 В', 'АВ1 C16 30мА · АВ2–АВ5', { w: 300, h: 320, bg: '#eceeef', fg: '#1c2226', leds: 0 });
+          g.add(b(3762, 3764, .65, .93, -.68, -.42, pf), b(3662, 3680, .03, .06, -.62, -.30, KM.pe));
+          api.root.add(b(5110, 5190, .57, .67, -.83, -.80, KM.dark), b(5130, 5170, .59, .65, -.845, -.83, KM.orange));
+          api.root.add(b(5225, 5245, .62, .70, .74, .765, KM.white)); // line 3 socket by the door
+          // 17: extinguisher beside the rack, first-aid case on the left shelf
+          g = EQ[16].obj;
+          const ex = mesh(new THREE.CylinderGeometry(.065, .065, .42, 20), KM.red); ex.position.copy(pt(3720, .23, -.42)); g.add(ex);
+          g.add(rod(pt(3720, .44, -.42), pt(3720, .5, -.42), .015, KM.black), b(4120, 4420, .60, .72, -.70, -.50, KM.orange), b(4250, 4290, .72, .73, -.64, -.56, KM.white));
+
+          // cable routes: 220 V orange, 12 V blue, signal grey
+          const r = .009;
+          pipe(cables, [[4900, .35, .5], [4880, .45, .757], [4300, .45, .757], [3690, .45, .757], [3690, .45, .30]], r, KM.c220);
+          pipe(cables, [[4450, .45, .74], [4450, .45, .757]], r, KM.c220);
+          pipe(cables, [[4905, .2, -.62], [4890, .45, -.757], [3690, .45, -.757], [3690, .63, -.62]], r, KM.c220);
+          pipe(cables, [[3680, .63, -.42], [3680, .45, -.30]], r, KM.c220);
+          pipe(cables, [[4000, .33, -.68], [3672, .4, -.68], [3672, .63, -.6]], r, KM.c12);
+          pipe(cables, [[3672, .40, -.68], [3672, .03, -.4], [3672, .03, .45], [3700, .2, .45]], r, KM.c12);
+          pipe(cables, [[3672, .9, -.6], [3690, .93, -.757], [4350, .93, -.757]], r, KM.c12);
+          pipe(cables, [[3672, .95, -.5], [3680, .972, -.6], [4850, .972, -.6]], r * .8, KM.c12);
+          pipe(cables, [[3680, .972, -.6], [3680, .972, .6], [4850, .972, .6]], r * .8, KM.c12);
+          pipe(cables, [[3800, hb + 12 * U + .03, .1], [3672, hb + 12 * U + .03, .1], [3672, RT, .1], [4250, RT + .01, .1]], r, KM.cSig);
+          pipe(cables, [[3672, RT, .1], [3700, RT + .01, -.42], [4950, RT + .01, -.42]], r, KM.cSig);
+          pipe(cables, [[3672, RT, .1], [3700, RT + .01, .55], [5200, RT + .01, .55]], r, KM.cSig);
+          pipe(cables, [[3700, RT + .01, -.42], [3700, RT + .01, -.55], [5200, RT + .01, -.55]], r, KM.cSig);
+          cables.traverse(o => { o.castShadow = false; o.userData.nopick = true });
+
+          // number markers, the info card and the highlight box
+          EQ.forEach((it, i) => { it.L = addLabel('eqn', String(it.n), new THREE.Vector3(), it.lg); it.L.el.dataset.eq = i; it.L.el.title = it.name });
+          card = addLabel('eqcard', '', new THREE.Vector3(), cardG);
+          hl = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(1, 1, 1)), new THREE.LineBasicMaterial({ color: 0xf0b429, depthTest: false, transparent: true }));
+          hl.renderOrder = 999; hl.visible = false; scene.add(hl);
+          geo = { F, RT, yt }; placeMasts();
+          parent.add(api.root); buildFlow(); apply();
+        };
+
+        /* power scheme in 3D: the corrected one-line diagram drawn as moving current over the real layout (x-ray) */
+        const flowG = new THREE.Group(), flowLG = new THREE.Group(), flowTex = [];
+        let flowRaise = 0;
+        api.root.add(flowG);
+        const FC = { ac: '#ff8a2a', ups: '#ffd43b', dc24: '#ff4d4d', dc: '#3d9bff', neg: '#9aa4aa', pe: '#4cc35a' };
+        const dashImg = canvasTex(64, 8, (g, w, h) => { g.fillStyle = '#a0a0a0'; g.fillRect(0, 0, w, h); g.fillStyle = '#fff'; g.fillRect(w * .45, 0, w * .4, h) });
+        const xray = (m, o = .95) => Object.assign(m, { transparent: true, opacity: o, depthTest: false, depthWrite: false });
+        // generator outside: 1.9 m behind its slider, 1.3 m to the left of the car, on the ground
+        const genOff = () => new THREE.Vector3(S(6950) - S(5050), -raise - F, -1.3 - .495);
+        function placeGen() { EQ[5].obj.position.copy(K.genOut ? genOff() : new THREE.Vector3()) }
+        function fline(type, pts, r = .011) {
+          r *= 1.15;
+          const path = new THREE.CurvePath(), v = pts.map(p => p.isVector3 ? p : pt(...p));
+          for (let i = 1; i < v.length; i++) path.add(new THREE.LineCurve3(v[i - 1], v[i]));
+          const len = path.getLength(), t = dashImg.clone(); t.needsUpdate = true; t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(len / .16, 1); flowTex.push(t);
+          const m = new THREE.Mesh(new THREE.TubeGeometry(path, Math.ceil(len / .02), r, 6, false), xray(new THREE.MeshBasicMaterial({ color: FC[type], map: t })));
+          m.renderOrder = 995; flowG.add(m);
+        }
+        function fbox(p1, p2, color, o = .9) { const m = new THREE.Mesh(new THREE.BoxGeometry(...p2.clone().sub(p1).toArray().map(Math.abs)), xray(new THREE.MeshBasicMaterial({ color }), o)); m.position.copy(p1).add(p2).multiplyScalar(.5); m.renderOrder = 994; flowG.add(m); return m }
+        // nodes of the diagram: key → 3D anchor; the panel blocks use the same keys
+        const NODES = {}, nodeL = [];
+        function node(key, html, p, c, cam) { NODES[key] = { p, cam }; const L = addLabel('pwl', html, new THREE.Vector3(), flowLG); L.el.dataset.pn = key; L.el.style.setProperty('--c', c); L.local = p; nodeL.push(L) }
+        function buildFlow() {
+          flowG.children.forEach(c => { c.geometry.dispose(); c.material.dispose() }); flowG.clear(); flowTex.forEach(t => t.dispose()); flowTex.length = 0;
+          removeLabels(l => l.group === flowLG); nodeL.length = 0;
+          placeGen();
+          const A = (s, y, z) => pt(s, y - F, z), gy = -raise - F, go = genOff(), RT = geo.RT;
+          const G = (s, h, z) => K.genOut ? pt(s, h, z).add(go) : pt(s, h, z);
+          // --- ~220 V: generator → reel → inlet → АВ1 → АВ2 → stabiliser → UPS → rack
+          const inlet = pt(5150, .62, -.84);
+          if (K.genOut) fline('ac', [G(5200, .25, .40), G(5230, .02, .40), pt(5600, gy + .02, -1.15), pt(5150, gy + .02, -1.0), pt(5150, .3, -.86), inlet]);
+          else fline('ac', [G(5195, .3, .40), [5235, .03, .40], [5235, .03, -.50], [5120, .2, -.56], [5150, .45, -.80], inlet]);
+          fline('ac', [inlet, [5150, .62, -.765], [5150, .45, -.757], [3700, .45, -.757], [3700, .63, -.62]]);
+          fline('ac', [[3700, .63, -.48], [3690, .40, -.30], [3780, .19, -.10]], .009); // АВ2 → stabiliser
+          fline('ac', [[3790, .17, -.06], [3790, .10, .02]], .009); // stabiliser → UPS
+          // clean 220 V after the UPS: rack riser, Iridium dock, camera mast, Starlink
+          fline('ups', [[3800, .10, .12], [3770, .12, .18], [3770, .47, .18], [3830, .47, .10]], .009);
+          [.23, .32].forEach(h => fline('ups', [[3770, h, .18], [3830, h, .12]], .007));
+          fline('ups', [[3770, .47, .18], [3700, .64, .18], [3700, .64, -.36], [4900, .64, -.36]], .008);
+          fline('ups', [[3700, .64, .18], [3672, .98, .10], [3700, RT + .02, -.55], [5200, RT + .02, -.55], [5200, RT + .3, -.60]], .008);
+          fline('ups', [[3700, RT + .02, -.42], [4950, RT + .02, -.42], [4950, RT + .18, -.42]], .007);
+          // 24 V: battery pack → DC breaker → UPS
+          fline('dc24', [[3740, .24, .415], [3830, .30, .41], [3830, .30, .25], [3810, .10, .20]], .01);
+          fline('dc24', [[3990, .23, .415], [4080, .23, .415]], .008);
+          // АВ3–АВ5: TV, printer, door socket
+          fline('ac', [[3712, .95, -.45], [3690, .95, .757], [4300, .95, .757], [4600, .95, .70]], .008);
+          fline('ac', [[3690, .90, .757], [3690, .81, .70], [3900, .81, .65]], .008);
+          fline('ac', [[3690, .70, .757], [5235, .70, .757]], .008);
+          // --- =12 V: starter battery under the hood → FU1 → frame → QS2 / LVD / fuse block
+          const vb1 = A(520, .80, -.62), vb2 = A(790, .99, -.40);
+          fbox(vb1, vb2, '#3a4148', .85); fbox(A(800, .93, -.56), A(860, .99, -.50), '#ff4d4d');
+          fline('dc', [A(760, 1.0, -.47), A(830, .99, -.53), A(900, .70, -.55), A(1300, .52, -.50), A(3600, .52, -.50), pt(3690, .02, -.50), pt(3690, .02, -.70), pt(3995, .30, -.70)], .012);
+          fline('neg', [pt(4270, .27, -.70), pt(4270, .02, -.62), pt(3700, .02, -.62), A(3600, .50, -.58), A(1300, .50, -.58), A(900, .66, -.60), A(560, 1.0, -.60)], .01);
+          fline('dc', [[4100, .36, -.757], [4100, .972, -.757], [4100, .972, -.6], [4850, .972, -.6]], .008); // FU2 light
+          fline('dc', [[4150, .36, -.757], [3690, .36, -.757], [3690, RT + .1, -.72], [5220, RT + .1, -.72]], .008); // FU5 flood
+          fline('dc', [[3690, RT + .1, -.72], [3690, RT + .1, .72], [5220, RT + .1, .72]], .007);
+          fline('dc', [[4200, .36, -.70], [4400, .62, -.70]], .008); // FU4 heater
+          fline('dc', [[4240, .32, -.70], [4900, .40, -.70], [5060, .62, -.62]], .007); // FU3 radio / phone
+          // --- PE: board → bus → UPS frame, kung body, car frame, ground rod; generator frame via the reel
+          fline('pe', [[3700, .63, -.42], [3672, .06, -.45]], .007);
+          fline('pe', [[3680, .05, -.30], [3680, .05, .25], [3700, .10, .25]], .007);
+          fline('pe', [[3670, .05, -.62], [3670, .3, -.79]], .007);
+          fline('pe', [[3675, .04, -.55], A(3650, .50, -.66), A(4800, .50, -.66), pt(4800, gy + .02, -.95), pt(4800, gy + .02, -1.3), pt(4800, gy + .16, -1.3)], .008);
+          fbox(pt(4790, gy - .45, -1.31), pt(4810, gy + .15, -1.29), '#b87333');
+          // generator frame bonded through the reel's PE core
+          if (K.genOut) fline('pe', [G(5180, .05, .25), pt(5150, gy + .03, -1.05), pt(5150, .28, -.87)], .006);
+
+          node('gen', '<b>Генератор</b> HUTER DN2700Si · 2,3 кВт', G(5050, .62, .5), FC.ac, K.genOut ? [-2.2, 1.5, -2.2] : [-1.6, .5, -.4]);
+          node('reel', K.genOut ? '<b>Катушка 30 м</b> 3×2,5 · размотана' : '<b>Катушка 30 м</b> 3×2,5', K.genOut ? pt(5600, gy + .1, -1.15) : pt(5012, .42, -.615), FC.ac, [-1.6, .6, -.9]);
+          node('inlet', '<b>Вилка-ввод 16 А IP67</b>', pt(5150, .74, -.86), FC.ac, [-1.0, .3, -1.2]);
+          node('ab1', '<b>Щит 220 В</b> АВ1 АВДТ C16 30 мА · АВ2 C10 · АВ3–АВ5 · N–PE', pt(3712, 1.0, -.55), FC.ac, [-1.8, -.3, .6]);
+          node('stab', '<b>Стабилизатор</b> SVEN AVR SLIM-2000', pt(4180, .21, -.32), FC.ac, [-1.4, .35, .3]);
+          node('ups', '<b>ИБП</b> SVC RTO-1.5K · 900 Вт', pt(4180, .10, .30), FC.ups, [-1.3, .35, -.15]);
+          node('bat24', '<b>АКБ ИБП</b> 2×12 В 100 А·ч = 24 В · DC 63 А', pt(4100, .34, .45), FC.dc24, [-1.4, .55, -.3]);
+          node('rack', '<b>Стойка 12U</b> Hytera · AKS · MikroTik · шифратор', pt(4000, .63, 0), FC.ups, [-1.5, .12, 0]);
+          node('lines', '<b>АВ3–АВ5</b> ТВ · принтер · розетка', pt(4500, 1.0, .70), FC.ac, [-1.6, -.35, -.6]);
+          node('vbat', '<b>Бортовая АКБ</b> + FU1 MEGA 60 А', A(680, 1.08, -.5), FC.dc, [1.5, 1.1, -1.5]);
+          node('run', '<b>ПуГВ 16 мм²</b> «+» и отдельный «−» вдоль рамы', A(2300, .62, -.55), FC.dc, [0, .5, -2.8]);
+          node('blk12', '<b>Блок 12 В</b> QS2 · LVD 11,8 В · FU2–FU5', pt(4115, .44, -.68), FC.dc, [-1.5, .3, .65]);
+          node('pe', '<b>Шина PE</b> кунг · рама · заземлитель', pt(3700, .12, -.45), FC.pe, [-1.5, .35, .5]);
+          node('rod', '<b>Заземлитель</b> штырь, при стоянке', pt(4800, gy + .3, -1.3), FC.pe, [-1.6, 1.0, -1.8]);
+          flowG.traverse(o => { o.userData.nopick = true; o.castShadow = false });
+          relabelFlow();
+        }
+        function relabelFlow() { api.root.updateMatrixWorld(true); nodeL.forEach(L => L.pos.copy(L.local).applyMatrix4(api.root.matrixWorld)) }
+        let selN = null;
+        function selectNode(key) {
+          const n = NODES[key]; if (!n) return;
+          if (!K.flow) { K.flow = true; save(); apply() }
+          selN = key; nodeL.forEach(L => L.el.classList.toggle('on', L.el.dataset.pn === key)); $$('#k-power [data-node]').forEach(x => x.classList.toggle('on', x.dataset.node === key));
+          relabelFlow(); const c = n.p.clone().applyMatrix4(api.root.matrixWorld);
+          flyTo([c.x + n.cam[0] * 1.5, c.y + n.cam[1] * 1.5, c.z + n.cam[2]], c.toArray());
+        }
+        function placeMasts() {
+          masts.forEach(m => {
+            m.segs.forEach((s, i) => s.position.y = m.y0 + .02 + i * EXT_ * mastE + .275);
+            if (m.top.userData.whip) m.top.userData.whip.visible = mastE > .05;
+            m.top.position.y = m.y0 + .02 + (m.segs.length - 1) * EXT_ * mastE + .55 + m.top.userData.lift;
+          });
+        }
+        const EXT_ = .5;
+        api.on = () => P.proj === 'kung' && K.show;
+        // top of the installation in model coordinates (for the overall height)
+        const bb = new THREE.Box3(), tb = new THREE.Box3(), tv3 = new THREE.Vector3();
+        // bounds of the visible meshes only (hidden whip, the other TV variant)
+        function vbox(o) { bb.makeEmpty(); o.traverseVisible(c => { if (!c.isMesh) return; if (!c.geometry.boundingBox) c.geometry.computeBoundingBox(); bb.union(tb.copy(c.geometry.boundingBox).applyMatrix4(c.matrixWorld)) }); return bb }
+        api.topY = () => {
+          if (!geo || !api.on()) return 0;
+          if (!K.roof) return geo.F + geo.yt + .03;
+          bodyGroup.updateMatrixWorld(true); vbox(roofG); return bb.max.y - bodyGroup.position.y;
+        };
+        function relabel() {
+          if (!geo) return;
+          api.root.updateMatrixWorld(true); relabelFlow();
+          EQ.forEach(it => { vbox(objOf(it)); if (bb.isEmpty()) return; bb.getCenter(it.L.pos); it.L.pos.y = bb.max.y + .07 });
+          if (sel >= 0) {
+            vbox(objOf(EQ[sel])); bb.getCenter(hl.position); bb.getSize(tv3); hl.scale.set(tv3.x + .03, tv3.y + .03, tv3.z + .03);
+            card.pos.copy(hl.position); card.pos.y = bb.max.y + .3;
+          }
+        }
+        function line(a, c, tick, name, val) {
+          const tk = tick.clone().multiplyScalar(.05);
+          dimsG.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints([a, c, a.clone().add(tk), a.clone().sub(tk), c.clone().add(tk), c.clone().sub(tk)]), dimMat));
+          addLabel('lbl', `<span>${name}</span>${val}`, a.clone().lerp(c, .5), dimsG);
+        }
+        api.dims = function () {
+          dimsG.children.forEach(c => c.geometry.dispose()); dimsG.clear(); removeLabels(l => l.group === dimsG);
+          if (geo && flowRaise !== raise) { flowRaise = raise; buildFlow() } // ground-level parts follow the lift
+          relabel();
+          if (!geo) return;
+          const r = raise, v = (s, h, z) => new THREE.Vector3(S(s), F + h + r, z), X = new THREE.Vector3(1, 0, 0), Y = new THREE.Vector3(0, 1, 0), Zv = new THREE.Vector3(0, 0, 1);
+          const top = api.topY(), h = '≈' + fmt((top + r) * 1000) + ' мм';
+          line(v(3660, 1.06, -.9), v(5185, 1.06, -.9), Y, 'Кунг, полезная длина', '1525 мм');
+          line(v(5330, 1.06, -.77), v(5330, 1.06, .77), Y, 'Ширина', '1540 мм');
+          line(v(5330, 0, -.95), v(5330, .98, -.95), Zv, 'Высота', '980 мм');
+          line(v(5330, .03, -.553), v(5330, .03, .553), Y, 'Между арками', '1105 мм');
+          line(new THREE.Vector3(S(5330) - .35, 0, .95), new THREE.Vector3(S(5330) - .35, top + r, .95), X, 'Авто с оборудованием', h);
+          dimsG.visible = api.on() && K.dims;
+          $('#k-h').textContent = h; const hi = $('#k-hIss'); if (hi) hi.textContent = h;
+        };
+        function select(i, go) {
+          sel = i; const it = EQ[i];
+          if (it.roof && !K.roof) K.roof = true;
+          if (!it.roof && !(it.n === 6 && K.genOut) && !K.open && !K.shell) { K.open = true; cfg.tail = true; $('#o-tail').checked = true }
+          save(); apply(); relabel();
+          card.el.innerHTML = `<b>${it.n}. ${it.name}</b><span>${it.size === '—' ? '' : it.size + ' мм · '}${it.pw}</span>`;
+          $$('#k-list li').forEach((li, k) => li.classList.toggle('on', k === i));
+          EQ.forEach((e, k) => e.L && e.L.el.classList.toggle('on', k === i));
+          if (!go) return;
+          vbox(objOf(it)); const c = bb.getCenter(new THREE.Vector3()), d = Math.max(1.4, bb.getSize(tv3).length() * 1.5);
+          if (it.roof || (it.n === 6 && K.genOut)) flyTo([c.x - d * .8, c.y + d * .6, c.z + (c.z < 0 ? -1 : 1) * d * .8], c.toArray());
+          else flyTo([S(5280) - 1.15 - d * .25, c.y + .4, c.z * .3], c.toArray());
+        }
+        api.tick = function () {
+          if (!geo || !api.root.visible) return;
+          const k = reduce ? 1 : .1, ease1 = (cur, goal, kk) => Math.abs(goal - cur) < .0005 ? goal : cur + (goal - cur) * kk;
+          const h0 = hatchA, t0 = tvA, m0 = mastE;
+          hatchA = ease1(hatchA, K.open ? HATCH : 0, k); hatch.rotation.z = -hatchA;
+          tvA = ease1(tvA, K.open ? -Math.PI / 2 : 0, k); tvPivot.rotation.z = tvA;
+          mastE = ease1(mastE, K.mast ? 1 : 0, reduce ? 1 : .04);
+          if (mastE !== m0) { placeMasts(); if (mastE === (K.mast ? 1 : 0)) buildDims() }
+          if (hatchA !== h0 || tvA !== t0 || mastE !== m0) relabel();
+          if (flowG.visible && !reduce) flowTex.forEach(t => t.offset.x -= .045);
+        };
+
+        // ---- panel ----
+        $('#k-count').textContent = EQ.length;
+        $('#k-mass').innerHTML = '≈ ' + fmt(EQ.reduce((a, e) => a + e.m, 0)) + ' кг<em>оценка</em>';
+        $('#k-list').innerHTML = EQ.map((e, i) => `<li data-i="${i}"><span class="eqb">${e.n}</span><b>${e.name}</b><span>${e.sub}</span><small>${e.size === '—' ? '' : e.size + ' мм · '}<i class="${e.v}">${e.pw}</i>${e.where}</small></li>`).join('');
+        $('#k-list').addEventListener('click', e => { const li = e.target.closest('li'); if (li) select(+li.dataset.i, true) });
+        labelsEl.addEventListener('click', e => { const el = e.target.closest('[data-eq]'); if (el) select(+el.dataset.eq, true) });
+        const iss = (c, t, p) => `<div class="iss ${c}"><b>${t}</b><p>${p}</p></div>`;
+        $('#k-issues').innerHTML = [
+          iss('hi', 'Генератор не встаёт под полку «на середине высоты»', 'Середина кунга — 490 мм, а генератор по списку 540 мм в высоту. На модели полки подняты до 600 мм, под ними 575 мм.'),
+          iss('md', 'Колёсные арки занимают середину бортов', 'Арки идут примерно с 280 по 1200 мм от передней стенки, 225 мм внутрь и 260 мм в высоту. За правой аркой остаётся ~400 мм — генератор 540 мм встаёт только поперёк и выступает в проход на ~115 мм. АКБ ИБП стоят у правой стенки рядом со стойкой, блок 12 В — на левой арке.'),
+          iss('hi', 'Телевизор 43″ не помещается над полкой', 'Корпус 558 мм в высоту, а между полкой и потолком 380 мм — выступ ~180 мм (красная зона на модели). Варианты: откидной ТВ под потолком у двери (переключатель выше) или ТВ с корпусом до ~370 мм (около 24″).'),
+          iss('hi', 'Генератор работает только снаружи', 'Выхлоп (угарный газ) и пары бензина в закрытом кунге опасны. Схема это и предполагает: генератор → катушка 30 м → ввод. В кунге он только едет, работает — вынесенный на землю (переключатель «Генератор снаружи»).'),
+          iss('ok', 'Генератор выбран: HUTER DN2700Si', 'Принципиальная схема подтверждает HUTER DN2700Si из списка, Fubag BS 5500 из старой схемы размещения отпадает. Инвертора SVC DIL-1200 и АКБ BARS 190 А·ч в новой схеме нет — их убрали и с модели.'),
+          iss('md', 'Нагрузка на крышу', 'Багажник должен держать двух человек (~160 кг) плюс антенну AKS и мачты. Опоры лучше выводить на борта кузова, а не на крышу кунга. Высота авто с антенной — <span id="k-hIss">≈2,5 м</span>, учесть для паркингов и моек.'),
+          iss('md', 'Отопитель: забор топлива и выхлоп', 'По ТЗ топливо берётся из основного бака, значит нужны отверстия в полу кузова под топливную трассу и выхлоп. Ссылка в списке ведёт на Planar 2 кВт, а в требовании 1,5 кВт.'),
+          iss('md', 'Дуплексер Jesai не требует 220 В', 'Это пассивный фильтр между ретранслятором и антенной. В списке ему указано питание 220 В — можно убрать из расчёта.'),
+          iss('ok', 'Стойка проходит между арками', '19″ стойка ~560 мм шириной встаёт между арками (1105 мм), к ней остаётся проход ~640 мм между полками.')
+        ].join('');
+        // corrected one-line diagram; data-node links a block to its place in 3D
+        const fx = '<em class="fx">исправлено</em>', nw = '<em class="fx">добавлено</em>';
+        const nd = (c, t, s, key, was) => `<div class="nd ${c}"${key ? ` data-node="${key}" role="button" tabindex="0"` : ''}><b>${t}</b><span>${s}</span>${was ? `<s>было: ${was}</s>` : ''}</div>`;
+        const lvl = a => `<div class="lvl">${a.join('')}</div>`, arr = t => `<div class="arr">${t}</div>`, ctr = (t, a) => `<div class="ctr"><h4>${t}</h4>${a.join('')}</div>`;
+        $('#k-power').innerHTML = [
+          ctr('1. Контур переменного тока ~220 В 50 Гц', [
+            lvl([nd('v220', 'Генератор HUTER DN2700Si', 'инверторный, 2,3 кВт · работает снаружи', 'gen'), nd('v220', 'Катушка 30 м, 3×2,5', 'разматывать полностью', 'reel'), nd('v220', 'Вилка-ввод 16 А IP67 ' + nw, 'на борту кунга у двери', 'inlet')]),
+            arr('↓ 3×2,5'),
+            lvl([nd('v220', 'АВ1: АВДТ 2P C16 30 мА', 'вводной · перемычка N–PE на вводе ' + fx, 'ab1', 'без N–PE — АВДТ не сработает')]),
+            arr('↓'),
+            lvl([nd('v220', 'АВ2: C10 ' + nw, 'линия стабилизатор → ИБП', 'ab1', 'АВ2 в схеме пропущен'), nd('v220', 'АВ3 B6 · Линия 1', 'ТВ 43″, зарядки', 'lines'), nd('v220', 'АВ4 B10 · Линия 2', 'принтер (не через ИБП)', 'lines'), nd('v220', 'АВ5 B10 · Линия 3', 'розетка у двери', 'lines')]),
+            arr('↓'),
+            lvl([nd('v220', 'Стабилизатор SVEN AVR SLIM-2000', 'в стойке', 'stab'), nd('vups', 'ИБП SVC RTO-1.5K', '1500 ВА / 900 Вт · внутри 2×12 В 9 А·ч', 'ups'), nd('v24', 'АКБ ИБП 2×12 В 100 А·ч ' + fx, 'последовательно = 24 В · автомат DC 63 А', 'bat24', 'одна АКБ 12 В 100 А·ч')]),
+            arr('↓ 220 В после ИБП'),
+            lvl([nd('vups', 'Стойка 12U', 'Hytera HR1065 · контроллер AKS · MikroTik · шифратор', 'rack'), nd('vups', 'Iridium 9555, Starlink mini, камера', 'тоже от ИБП', 'rack')]),
+            lvl([nd('vpe', 'Главная шина PE ' + fx, 'корпус кунга + рама авто + заземлитель на стоянке; PE генератора — по жиле катушки', 'pe', 'шина не связана с рамой авто')])
+          ]),
+          ctr('2. Контур постоянного тока =12 В (бортовая сеть)', [
+            lvl([nd('v12', 'Генератор авто 14 В', 'штатный ДВС', 'vbat'), nd('v12', 'Бортовая АКБ', 'стартерная, под капотом', 'vbat')]),
+            arr('↓ ≤ 20 см'),
+            lvl([nd('v12', 'FU1: MEGA 60 А ' + fx, 'у АКБ', 'vbat', '60–100 А — 100 А не защищает 16 мм²'), nd('v12', 'ПуГВ 16 мм², ~6 м', '«+» вдоль рамы в кунг', 'run')]),
+            arr('↓'),
+            lvl([nd('v12', 'QS2: рубильник', 'разъединитель 12 В', 'blk12'), nd('v12', 'Реле разряда 11,8 В ' + nw, 'отключит кунг, чтобы авто завелось', 'blk12')]),
+            arr('↓ блок предохранителей 12 В'),
+            lvl([nd('v12', 'FU2 10 А', 'свет в кунге · 1,5 мм²', 'blk12'), nd('v12', 'FU3 15 А', 'радио / связь · 2,5 мм²', 'blk12'), nd('v12', 'FU4 20 А', 'отопитель · 4 мм²', 'blk12'), nd('v12', 'FU5 15 А ' + nw, 'фонари периметра · 2,5 мм²', 'blk12', 'фонари на FU2 вместе со светом')]),
+            lvl([nd('vneg', 'Минусовая шина ' + fx, 'отдельный провод 16 мм² на «−» АКБ / раму', 'run', '«масса» через металл кузова')])
+          ])
+        ].join('');
+        $('#k-power').addEventListener('click', e => { const n = e.target.closest('[data-node]'); if (n) selectNode(n.dataset.node) });
+        $('#k-power').addEventListener('keydown', e => { const n = e.target.closest('[data-node]'); if (n && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); selectNode(n.dataset.node) } });
+        labelsEl.addEventListener('click', e => { const el = e.target.closest('[data-pn]'); if (el) selectNode(el.dataset.pn) });
+        $('#k-fixes').innerHTML = [
+          iss('hi', 'АКБ 12 В 100 А·ч не подключить к ИБП', 'Внутри SVC RTO-1.5K две АКБ 12 В 9 А·ч последовательно — шина 24 В. Одну АКБ 12 В к нему не подключить. Нужно 2 × 12 В 100 А·ч последовательно (24 В) с автоматом DC 63 А, а ИБП — с разъёмом внешних АКБ и зарядом 6–10 А: штатный заряд ~1 А будет заряжать 100 А·ч несколько суток.'),
+          iss('hi', 'АВДТ 30 мА не сработает от инверторного генератора', 'У инверторного генератора N и PE не связаны (плавающая нейтраль). При пробое на корпус ток утечки не течёт, АВДТ молчит. Исправлено: перемычка N–PE на вводе кунга, PE генератора — через жилу катушки, на стоянке — заземлитель.'),
+          iss('hi', 'Кунг на стартерной АКБ без защиты', 'Свет, связь и отопитель всю ночь посадят бортовую АКБ, утром авто не заведётся. Исправлено: реле разряда, отключает кунг при 11,8 В. Лучше — отдельная сервисная АКБ с зарядом через DC-DC, как в первом документе.'),
+          iss('md', 'Нет автомата АВ2', 'Нумерация идёт АВ1 → АВ3: линия на стабилизатор и ИБП не защищена своим автоматом. Добавлен АВ2 C10.'),
+          iss('md', 'FU1 «60–100 А» на кабель 16 мм²', 'Сумма FU2–FU4 — 45 А. Предохранитель 100 А кабель 16 мм² в жгуте не защищает. Исправлено: MEGA 60 А.'),
+          iss('md', 'FU2 10 А на всё освещение', 'Свет в кунге 4 × 10 Вт и фонари периметра 4 × 25 Вт — около 11 А при 12,5 В, больше 10 А. Фонари вынесены на отдельный FU5 15 А, FU4 20 А отдан отопителю (свеча при пуске 8–10 А).'),
+          iss('md', 'Минус через «металл кузова»', 'Кунг стоит на кузове через лайнер и уплотнители, кузов на раме — на резиновых подушках. Надёжной массы там нет. Исправлено: отдельный минусовой провод 16 мм² от АКБ до шины в кунге и перемычка PE на раму.'),
+          iss('md', 'Нет ввода на корпусе кунга', 'Катушка заведена прямо в АВ1. Добавлена вилка-ввод 16 А IP67 на борту у двери: к ней подключают и генератор, и внешнюю сеть.'),
+          iss('md', 'Без генератора связь живёт ~15–20 минут', 'AKS, Starlink, Hytera и стойка берут ~350 Вт. Внутренних 2 × 9 А·ч хватит на 15–20 мин, с АКБ 2 × 100 А·ч — около 3 ч (см. «Баланс мощности»).'),
+          iss('ok', 'Что в схеме верно', 'АВДТ 30 мА на вводе, B6/B10 на линиях после C16, кабель 3 × 2,5, MEGA у АКБ не дальше 20 см, рубильник, раздельные предохранители. Принтер не через ИБП — правильно, лазерный принтер при нагреве берёт до 1 кВт. Стабилизатор перед ИБП не обязателен (у ИБП есть свой AVR), но и не мешает.')
+        ].join('');
+        // power budget by the corrected scheme: typical nameplate values, to be checked against the passports
+        const BUD = [['ups', 'Антенна AKS с контроллером', 150], ['ups', 'Starlink mini', 40], ['ups', 'Hytera HR1065, передача', 100], ['ups', 'Iridium 9555 с док-станцией', 10], ['ups', 'MikroTik', 10],
+        ['ups', 'Шифратор', 20], ['ups', 'Камера HiWatch DS-I215(D)', 20], ['ac', 'Телевизор 43″', 70, 'Л1'], ['ac', 'Принтер во время печати', 400, 'Л2'], ['ac', 'Ноутбук / зарядки', 65, 'Л3'],
+        ['dc', 'Отопитель (вентилятор, свеча)', 30, 'FU4'], ['dc', 'Свет в кунге, 4 шт.', 40, 'FU2'], ['dc', 'Фонари периметра, 4 шт.', 100, 'FU5'], ['dc', 'Телефон teXet TX-215', 2, 'FU3']];
+        // the open kung door goes with the open tailgate, as on the render
+        if (api.on() && K.open) cfg.tail = true;
+        if (!Array.isArray(K.bud) || K.bud.length !== BUD.length) K.bud = [1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1];
+        function renderBud() {
+          let ups = 0, ac = 0, dc = 0; const fu = {};
+          $('#k-bud').innerHTML = BUD.map(([t, name, w, f], i) => {
+            if (K.bud[i]) { if (t === 'ups') ups += w; else if (t === 'ac') ac += w; else { dc += w; fu[f] = (fu[f] || 0) + w } }
+            return `<tr><td><input type="checkbox" data-b="${i}" ${K.bud[i] ? 'checked' : ''} aria-label="${name}"></td><td>${name} <span class="st">${t === 'ups' ? 'ИБП' : f}</span></td><td class="n">${w}</td></tr>`;
+          }).join('');
+          const bad = s => `<span style="color:var(--bad)">${s}</span>`, pct = (v, max) => { const p = Math.round(v / max * 100) + '%'; return v > max * .8 ? bad(p) : p };
+          const tm = h => !isFinite(h) ? '—' : h < 1 ? '≈ ' + Math.round(h * 60) + ' мин' : '≈ ' + h.toFixed(1).replace('.', ',') + ' ч';
+          const gen = ups / .85 + ac + (ups ? 150 : 0), amp = dc / 12.5, fu2old = (BUD[11][2] + BUD[12][2]) / 12.5;
+          $('#k-budTot').innerHTML = [['Через ИБП', fmt(ups) + ' Вт'], ['Загрузка ИБП, 900 Вт', pct(ups, 900)],
+          ['Без генератора, внутр. 2×9 А·ч', tm(24 * 9 * .6 * .85 / ups)], ['Без генератора, 2×100 А·ч до 50%', tm(24 * 100 * .5 * .85 / ups)],
+          ['Генератор 2,3 кВт (с зарядом АКБ ИБП)', fmt(gen) + ' Вт · ' + pct(gen, 2300)],
+          ['Ток 12 В из бортовой АКБ', '≈ ' + amp.toFixed(1).replace('.', ',') + ' А · FU1 60 А'],
+          ['Бортовая АКБ до реле 11,8 В', tm(25 / amp)],
+          ['FU2 10 А, как в исходной схеме (свет + фонари)', fu2old > 10 ? bad('≈ ' + fu2old.toFixed(1).replace('.', ',') + ' А') : fu2old.toFixed(1) + ' А']]
+            .map(([a, c]) => `<div><dt>${a}</dt><dd>${c}</dd></div>`).join('');
+        }
+        $('#k-bud').addEventListener('change', e => { const i = e.target.dataset.b; if (i == null) return; K.bud[i] = e.target.checked ? 1 : 0; save(); renderBud() });
+        renderBud();
+
+        function apply() {
+          const on = api.on();
+          api.root.visible = on; roofG.visible = K.roof; cables.visible = K.cable && !K.flow;
+          flowG.visible = flowLG.visible = on && K.flow;
+          tvG.spec.visible = K.tv === 'spec'; tvG.ceil.visible = K.tv === 'ceil';
+          walls.forEach(o => { o.material = K.shell ? KM.glass : KM.paint; o.userData.nopick = K.shell; o.castShadow = !K.shell });
+          windows.forEach(o => o.visible = !K.shell);
+          dimsG.visible = on && K.dims;
+          const night = on && P.night;
+          KM.lamp.emissiveIntensity = night ? 2.5 : 0; KM.flood.emissiveIntensity = night ? 3 : 0; inLight.intensity = night ? 2.6 : 0; spots.forEach(s => s.intensity = night ? 2.4 : 0);
+          EQ.forEach(it => it.lg.visible = on && K.nums && !K.flow && (!it.roof || K.roof));
+          cardG.visible = on && sel >= 0 && (!EQ[sel].roof || K.roof); if (hl) hl.visible = cardG.visible;
+          ['show', 'shell', 'open', 'roof', 'mast', 'cable', 'flow', 'genOut', 'nums', 'dims'].forEach(k => $('#k-' + k).checked = !!K[k]); $('#k-night').checked = !!P.night;
+          $$('#k-tv [data-tv]').forEach(x => x.setAttribute('aria-pressed', x.dataset.tv === K.tv));
+          $('#k-tvNote').textContent = K.tv === 'spec' ? 'Как в схеме: ТВ на кронштейне над правой полкой. Над полкой 380 мм, ТВ 558 мм — красным показан выступ за крышу.'
+            : 'ТВ лежит под потолком у двери и откидывается экраном наружу, когда дверь кунга открыта. По высоте помещается: низ экрана ~400 мм над полом.';
+          $$('#projSel [data-proj]').forEach(x => x.setAttribute('aria-pressed', x.dataset.proj === P.proj));
+          $$('[data-projbox]').forEach(x => x.hidden = x.dataset.projbox !== P.proj);
+        }
+        api.apply = apply;
+        function set(k, v) {
+          K[k] = v; save();
+          if (k === 'open') { cfg.tail = v; $('#o-tail').checked = v; syncOpenAll() }
+          apply(); relabel();
+          if (k === 'show') { if (v && K.open) { cfg.tail = true; $('#o-tail').checked = true; syncOpenAll() } buildCar(); if (v) goView('kung') }
+          if (k === 'roof' || k === 'dims') buildDims();
+          if (k === 'genOut') { buildFlow(); relabel(); if (sel === 5) select(5, true) }
+          if (k === 'flow' && v) goView('power');
+        }
+        ['show', 'shell', 'open', 'roof', 'mast', 'cable', 'flow', 'genOut', 'nums', 'dims'].forEach(k => $('#k-' + k).addEventListener('change', e => set(k, e.target.checked)));
+        $('#k-night').addEventListener('change', e => { P.night = e.target.checked; save(); applyEnv(); LED.apply(); apply() });
+        $('#k-tv').addEventListener('click', e => { const v = e.target.dataset.tv; if (!v) return; set('tv', v); if (sel === 3) select(3, false) });
+        $('#projSel').addEventListener('click', e => {
+          const v = e.target.dataset.proj; if (!v) return;
+          P.proj = v; if (api.on() && K.open) { cfg.tail = true; $('#o-tail').checked = true; syncOpenAll() }
+          save(); LED.apply(); apply(); buildCar();
+          if (v === 'kung' && K.show) goView('kung'); if (v === 'led' && P.show) goView('led');
+        });
         apply();
         return api;
       })();
@@ -1735,7 +2398,7 @@
       function views() {
         const r = raise; return {
           iso: [[6.4, 3.0, 5.6], [-.25, .85, 0]], front: [[8.5, 1.2, 0], [0, .95, 0]], side: [[-.1, 1.15, 9.6], [-.1, .95, 0]],
-          rear: [[-8.5, 1.6, 0], [0, .95, 0]], top: [[-.1, 12, .01], [-.1, 0, 0]], bed: [[-5.2, 3.3, 2.6], [S(4400), .95 + r, 0]], led: [[-4.6, 2.3 + r, 6.4], [S(4100), 1.3 + r, 0]],
+          rear: [[-8.5, 1.6, 0], [0, .95, 0]], top: [[-.1, 12, .01], [-.1, 0, 0]], bed: [[-5.2, 3.3, 2.6], [S(4400), .95 + r, 0]], led: [[-4.6, 2.3 + r, 6.4], [S(4100), 1.3 + r, 0]], kung: [[-4.9, 2.9 + r, 3.9], [S(4350), 1.35 + r, 0]], power: [[-3.6, 3.4 + r, -5.6], [S(3400), .85 + r, -.4]],
           driver: [[S(2850), 1.44 + r, -.38], [S(2850) + .01, 1.437 + r, -.38], 1], rearseat: [[S(3325), 1.42 + r, 0], [S(3325) + .01, 1.417 + r, 0], 1]
         }
       }
@@ -1849,7 +2512,9 @@
       $$('.tab').forEach(t => t.addEventListener('click', () => {
         $$('.tab').forEach(x => x.setAttribute('aria-selected', x === t)); $$('.pane').forEach(p => p.hidden = p.dataset.pane !== t.dataset.tab);
         if (t.dataset.tab !== 'tape' && mode === 'tape') setMode('orbit'); if (t.dataset.tab !== 'notes' && mode === 'pin') setMode('orbit');
-        if (t.dataset.tab === 'pirant' && cfg.pirant.show) goView('led')
+        // project numbers would mix with note pins, so pins hide on the projects tab
+        $('#app').dataset.tab = t.dataset.tab; pinObjs.forEach(o => o.visible = t.dataset.tab !== 'pirant');
+        if (t.dataset.tab === 'pirant') { if (cfg.pirant.proj === 'kung' && cfg.kung.show) goView('kung'); else if (cfg.pirant.proj === 'led' && cfg.pirant.show) goView('led') }
       }));
       ['overall', 'bed', 'cabin'].forEach(k => { const el = $('#d-' + k); el.checked = !!cfg.dims[k]; el.addEventListener('change', () => { cfg.dims[k] = el.checked; groups[k].visible = el.checked; save() }) });
       const opt = { canopy: 'o-canopy', rack: 'o-rack', pod: 'o-pod', bar: 'o-bar', snorkel: 'o-snorkel', bumper: 'o-bumper', wheels: 'o-wheels' };
@@ -1903,7 +2568,7 @@
         if (N.tailgate) N.tailgate.rotation.z = ang.tail;
         if (N.hood) N.hood.rotation.z = ang.hood;
         ['door_FL', 'door_RL'].forEach(n => N[n] && (N[n].rotation.y = -ang.doors)); ['door_FR', 'door_RR'].forEach(n => N[n] && (N[n].rotation.y = ang.doors));
-        LED.tick(now / 1000);
+        LED.tick(now / 1000); KUNG.tick();
         renderer.render(scene, camera);
         const w = stage.clientWidth, h = stage.clientHeight;
         for (const l of labels) {
